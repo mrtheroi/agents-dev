@@ -30,6 +30,10 @@
 //                        still resolve, and that fixtures exist. Prints a coverage
 //                        table (which agents have evals). Exit 1 on any hard error.
 //                        THIS is what belongs in CI on every PR.
+//   A case may override the instruction sent with its fixture via `instruction`.
+//   The default is review-shaped, which is wrong for a task builder: asked to "report
+//   findings" a builder answers as a reviewer and its own doctrine is never exercised.
+//
 //   --run                Spends tokens. Dispatches each case to the agent headless
 //                        via `claude -p`, then grades the output against
 //                        mustMention/mustNotMention. Exit 1 on any failing case.
@@ -114,6 +118,8 @@ function validateSpec(spec, ctx, errors) {
       const fp = path.join(ROOT, 'plugins', ctx.stack, c.input.file);
       if (!fs.existsSync(fp)) errors.push(`${cw}: fixture not found: ${c.input.file}`);
     }
+    if (c.instruction != null && typeof c.instruction !== 'string')
+      errors.push(`${cw}: "instruction" must be a string when present`);
     const exp = c.expect || {};
     const mm = exp.mustMention || [];
     const mn = exp.mustNotMention || [];
@@ -176,13 +182,21 @@ function inputText(c, stack) {
 
 // Best-effort headless dispatch. Returns the agent's text output, or throws with a
 // clear message if the `claude` CLI isn't available / errors.
-function dispatch(systemPrompt, userPrompt) {
-  const prompt =
-    `${userPrompt}\n\n---\nReview the material above and report your findings.`;
+const DEFAULT_INSTRUCTION = 'Review the material above and report your findings.';
+
+// Read-only by construction. The agent's own `tools:` frontmatter is stripped before
+// this runs, so without a restriction a case whose instruction says "implement" would
+// be free to write into the working tree. An eval that mutates the repo it is grading
+// is not an eval. This also makes a run hermetic: the agent works from the fixture
+// text, never from whatever the repo happens to look like right now.
+const EVAL_TOOLS = ['Read', 'Grep', 'Glob'];
+
+function dispatch(systemPrompt, userPrompt, instruction) {
+  const prompt = `${userPrompt}\n\n---\n${instruction || DEFAULT_INSTRUCTION}`;
   try {
     return execFileSync(
       'claude',
-      ['-p', prompt, '--append-system-prompt', systemPrompt],
+      ['-p', prompt, '--append-system-prompt', systemPrompt, '--tools', ...EVAL_TOOLS],
       { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] },
     );
   } catch (e) {
@@ -220,7 +234,7 @@ function runDispatch() {
       process.stdout.write(`  · ${c.name} … `);
       let output;
       try {
-        output = dispatch(systemPrompt, inputText(c, stack));
+        output = dispatch(systemPrompt, inputText(c, stack), c.instruction);
       } catch (e) {
         console.log(`ERROR (${e.message})`);
         failed++;

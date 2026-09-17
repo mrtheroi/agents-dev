@@ -85,9 +85,14 @@ const greater = (a, b) => {
 };
 
 // ─── which plugins changed ───────────────────────────────────────────────────────
-const changed = (gitOk(['diff', '--name-only', base.sha]) || '')
-  .split('\n')
-  .filter((f) => f.startsWith('plugins/'));
+// Tracked changes, plus files that exist only in the working tree. `git diff` cannot
+// see an untracked file, so without the second list a brand-new agent or eval dropped
+// into a plugin reads as "nothing changed here" right up until it is staged — and this
+// gate is most useful BEFORE the commit, which is exactly when that blind spot bites.
+const changed = [
+  ...(gitOk(['diff', '--name-only', base.sha]) || '').split('\n'),
+  ...(gitOk(['ls-files', '--others', '--exclude-standard']) || '').split('\n'),
+].filter((f) => f.startsWith('plugins/'));
 
 const touched = new Map();
 for (const f of changed) {

@@ -38,7 +38,7 @@ demand** from their description, so an extra one costs nothing.
 
 ## Catalog
 
-### Common <sub>`common` · v1.8.0</sub>
+### Common <sub>`common` · v1.8.1</sub>
 
 Stack-agnostic Claude Code subagents (e.g. pr-reviewer) plus the universal standards layer (standards/) that the per-stack agents compose in.
 
@@ -48,7 +48,7 @@ Stack-agnostic Claude Code subagents (e.g. pr-reviewer) plus the universal stand
 | `/batch-review` | command | Review a wide diff (many changed files) by fanning out pr-reviewer across folder-scoped batches. |
 | `batch-review` | skill | Orchestrator playbook for reviewing a wide diff (many changed files) by fanning out a code-reviewer subagent across folder-scoped batches instead of one subagent per file. |
 
-### Python <sub>`python` · v0.4.0</sub>
+### Python <sub>`python` · v0.4.1</sub>
 
 Claude Code subagents for Python projects: implements tasks test-first inside a Hexagonal Architecture with Poetry-managed dependencies, and reviews changes for correctness, security, and architecture violations.
 
@@ -57,7 +57,7 @@ Claude Code subagents for Python projects: implements tasks test-first inside a 
 | `python-code-reviewer` | subagent | Reviews the staged changes (or a given set of files / diff range) of this Python backend for correctness bugs, security issues, and violations of Hexagonal Architecture or Strict… |
 | `python-task-builder` | subagent | Implements ONE Python task (a use case, endpoint, or feature) end to end in this backend, following strict TDD (Red-Green-Refactor) and Hexagonal Architecture (domain /… |
 
-### Laravel <sub>`laravel` · v0.2.0</sub>
+### Laravel <sub>`laravel` · v0.2.1</sub>
 
 Laravel subagents that detect the consumer repo's own architecture tier (canonical / service layer / hexagonal) and surface (API-only / fullstack) before acting: a test-first task builder and a code reviewer that reports defects plainly, quantifies consequences, and stays silent on taste.
 

@@ -27,7 +27,9 @@ diff --git a/app/Http/Controllers/BookController.php b/app/Http/Controllers/Book
 +
 +        $book = Book::create($request->validated());
 +
-+        return new BookResource($book);
++        return (new BookResource($book->load('author')))
++            ->response()
++            ->setStatusCode(201);
 +    }
  }
 diff --git a/app/Http/Requests/StoreBookRequest.php b/app/Http/Requests/StoreBookRequest.php

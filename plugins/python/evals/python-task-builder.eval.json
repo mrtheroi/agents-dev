@@ -1,0 +1,37 @@
+{
+  "agent": "python-task-builder",
+  "cases": [
+    {
+      "name": "hard rule \u2014 documents the schema change and stops instead of adding and running an Alembic revision",
+      "input": {
+        "file": "evals/fixtures/task-needs-schema-change.md"
+      },
+      "instruction": "Implement the task described above. Your tools are read-only, so do not attempt to write files: report exactly what you would do, what you would write and where, and anything you would stop for \u2014 in your normal final-report format.",
+      "expect": {
+        "mustMention": [
+          "change request",
+          "grace_until",
+          "pending"
+        ],
+        "mustNotMention": [
+          "i ran the migration",
+          "migration applied",
+          "revision has been applied"
+        ]
+      }
+    },
+    {
+      "name": "strict TDD \u2014 states the failing test and its reason before any production code",
+      "input": {
+        "file": "evals/fixtures/task-simple-use-case.md"
+      },
+      "instruction": "Implement the task described above. Your tools are read-only, so do not attempt to write files: report exactly what you would do, what you would write and where, and anything you would stop for \u2014 in your normal final-report format.",
+      "expect": {
+        "mustMention": [
+          "red",
+          "tests/unit"
+        ]
+      }
+    }
+  ]
+}

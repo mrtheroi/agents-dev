@@ -1,0 +1,22 @@
+{
+  "agent": "pr-reviewer",
+  "cases": [
+    {
+      "name": "stack-agnostic diff \u2014 flags the embedded token, the SSRF-shaped URL, the swallowed error and the secret in the log",
+      "input": {
+        "file": "evals/fixtures/secret-and-swallowed-error.diff"
+      },
+      "expect": {
+        "mustMention": [
+          "token",
+          "swallow",
+          "log"
+        ],
+        "mustNotMention": [
+          "looks good to commit",
+          "no issues found"
+        ]
+      }
+    }
+  ]
+}

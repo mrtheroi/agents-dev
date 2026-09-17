@@ -1,7 +1,7 @@
 {
   "name": "python",
   "description": "Claude Code subagents for Python projects: implements tasks test-first inside a Hexagonal Architecture with Poetry-managed dependencies, and reviews changes for correctness, security, and architecture violations.",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": {
     "name": "claude-dev-agents contributors"
   },

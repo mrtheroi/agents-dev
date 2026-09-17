@@ -11,6 +11,19 @@ plugin versiona por separado en su propio `plugin.json`.
 
 ### Added
 
+- **Evals para los cinco subagentes** — cobertura 5/5, diez casos. Los tres nuevos
+  (`pr-reviewer`, `python-task-builder`, `laravel-task-builder`) cubren lo que más
+  importa que no se silencie: que un builder **pare y documente** ante una columna que
+  no existe en vez de improvisar una migración, que no invente `app/Domain/` en un repo
+  canónico, y que declare el RED antes de escribir producción.
+
+  Dos arreglos al harness lo hicieron posible. La instrucción enviada con el fixture
+  estaba **hardcodeada con forma de review**; un task-builder al que le pides «reportá
+  hallazgos» responde como reviewer y su doctrina nunca se ejerce, así que cada caso
+  puede ahora sobreescribirla con `instruction` (el default no cambia). Y la corrida
+  pasa a ser **hermética** con `--tools Read Grep Glob`: el frontmatter se descarta
+  antes de invocar, de modo que el `tools:` del agente no aplicaba y un caso que dijera
+  «implementá esto» podía escribir en el repo que estaba evaluando.
 - **`agent-memory.md`** en `common/standards/`, doctrina de memoria para el
   **orquestador**. Lo hereda `batch-review` vía `@include`, y lo heredará cualquier
   skill que coordine subagentes.
@@ -53,6 +66,11 @@ plugin versiona por separado en su propio `plugin.json`.
 
 ### Fixed
 
+- **`check-version-bump.mjs` no veía los archivos nuevos sin rastrear.** `git diff` no
+  los muestra, así que un agente o un eval recién creado dentro de un plugin se leía
+  como «aquí no cambió nada» hasta que alguien lo stageara — y esta guarda se usa sobre
+  todo **antes** del commit, que es justo donde fallaba. En CI no se notaba porque allí
+  todo va commiteado.
 - **`check-neutrality.mjs` escanea ahora la identidad de git**, no solo archivos. Era un
   punto ciego real: seis commits se publicaron con una dirección de empresa heredada del
   `~/.gitconfig` global mientras la guarda reportaba el árbol limpio. Revisa

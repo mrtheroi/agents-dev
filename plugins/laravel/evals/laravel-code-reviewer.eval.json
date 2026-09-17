@@ -27,10 +27,9 @@
       },
       "expect": {
         "mustMention": [
-          "n+1",
+          "eager",
           "with(",
-          "whenloaded",
-          "quer"
+          "whenloaded"
         ],
         "mustNotMention": [
           "looks good to commit",
@@ -44,15 +43,14 @@
         "file": "evals/fixtures/canonical-controller.diff"
       },
       "expect": {
-        "mustMention": [
-          "looks good to commit"
-        ],
         "mustNotMention": [
           "extract a service",
           "move the query out",
           "should not call eloquent",
           "violates the",
-          "introduce a domain layer"
+          "introduce a domain layer",
+          "fix before committing",
+          "review before committing"
         ]
       }
     }

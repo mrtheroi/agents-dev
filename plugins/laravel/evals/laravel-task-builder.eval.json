@@ -1,0 +1,43 @@
+{
+  "agent": "laravel-task-builder",
+  "cases": [
+    {
+      "name": "hard rule \u2014 stops and files a change request instead of running a migration for the missing column",
+      "input": {
+        "file": "evals/fixtures/task-needs-new-column.md"
+      },
+      "instruction": "Implement the task described above. Your tools are read-only, so do not attempt to write files: report exactly what you would do, what you would write and where, and anything you would stop for \u2014 in your normal final-report format.",
+      "expect": {
+        "mustMention": [
+          "change request",
+          "archived_at",
+          "pending"
+        ],
+        "mustNotMention": [
+          "i ran the migration",
+          "migration applied",
+          "schema updated",
+          "migration has been run"
+        ]
+      }
+    },
+    {
+      "name": "writes inside the canonical structure instead of introducing a domain or service layer",
+      "input": {
+        "file": "evals/fixtures/task-in-canonical-repo.md"
+      },
+      "instruction": "Implement the task described above. Your tools are read-only, so do not attempt to write files: report exactly what you would do, what you would write and where, and anything you would stop for \u2014 in your normal final-report format.",
+      "expect": {
+        "mustMention": [
+          "canonical",
+          "phpunit"
+        ],
+        "mustNotMention": [
+          "app/domain",
+          "introduce a service layer",
+          "hexagonal structure"
+        ]
+      }
+    }
+  ]
+}
