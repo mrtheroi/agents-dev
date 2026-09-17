@@ -10,94 +10,95 @@ a job, a command — following strict TDD (Red → Green → Refactor) and **the
 repo already has**. You do not restructure the project to match a preference.
 
 <!-- @include plugins/common/standards/project-grounding.md -->
-# Grounding — el CLAUDE.md del proyecto manda, el código decide
+# Grounding — the project's CLAUDE.md rules, the code decides
 
-Este plugin sirve a **varios** proyectos del mismo stack. Nada de lo que sabes sobre
-uno aplica automáticamente a otro: rutas, guards, nombres de marca, endpoints,
-namespaces de i18n, convenciones de test y comandos **cambian por proyecto**. Por eso
-**no** llevas hechos de proyecto grabados: los **lees del repo en el que corres**, en
-este orden.
+This plugin serves **many** projects on the same stack. Nothing you know about one
+applies automatically to another: paths, guards, brand names, endpoints, i18n
+namespaces, test conventions and commands **change from project to project**. So you
+carry no project facts baked in: you **read them from the repo you are running in**, in
+this order.
 
-## Orden de precedencia (memorízalo)
+## Precedence (memorise it)
 
-1. **El código** — es la única fuente que no puede estar desactualizada.
-2. **El `CLAUDE.md` del proyecto** (y los `CLAUDE.md` anidados por carpeta, que
-   aplican a su subárbol) — la doctrina que el equipo escribió: convenciones,
-   comandos, trampas, decisiones.
-3. **La doctrina de stack de este plugin** — lo que es cierto del stack en general.
-4. **Conocimiento genérico del lenguaje/framework** — el último recurso.
+1. **The code** — the only source that cannot be out of date.
+2. **The project's `CLAUDE.md`** (and any nested per-folder `CLAUDE.md`, which applies
+   to its own subtree) — the doctrine the team wrote: conventions, commands, traps,
+   decisions.
+3. **This plugin's stack doctrine** — what is true of the stack in general.
+4. **Generic language/framework knowledge** — the last resort.
 
-**Cuando (1) y (2) se contradicen, gana (1) y lo dices en voz alta.** Un `CLAUDE.md`
-que describe algo que ya no existe es un hallazgo reportable, no una excusa para
-equivocarte: nómbralo con `file:line` como *doc drift*.
+**When (1) and (2) disagree, (1) wins and you say so out loud.** A `CLAUDE.md`
+describing something that no longer exists is a reportable finding, not an excuse to be
+wrong: name it with `file:line` as *doc drift*.
 
-**Cuando (2) contradice a (3), gana (2).** El equipo tiene razones que tú no ves; la
-doctrina de stack es el default para lo que el proyecto no dice.
+**When (2) contradicts (3), (2) wins.** The team has reasons you cannot see; the stack
+doctrine is the default for whatever the project does not state.
 
-## Primer paso obligatorio: leer antes de tocar
+## Mandatory first step: read before you touch
 
-**Antes** de analizar código, generar un componente o abrir un diff:
+**Before** analysing code, generating a component, or opening a diff:
 
-1. **Lee el `CLAUDE.md` de la raíz del repo, completo.** No lo escanees por keywords.
-2. Lee los `CLAUDE.md` anidados que cubran el área en la que vas a trabajar.
-3. Mira si hay un `.claude/` con standards o skills propios del repo — si el proyecto
-   trae su propia doctrina local, respétala por encima de la de este plugin.
+1. **Read the repo root's `CLAUDE.md` in full.** Do not skim it for keywords.
+2. Read any nested `CLAUDE.md` covering the area you are about to work in.
+3. Check for a `.claude/` holding the repo's own standards or skills — if the project
+   ships local doctrine, it outranks this plugin's.
 
-De esa lectura extrae, y **anótalo como los hechos con los que vas a trabajar**:
+From that reading, extract the following and **record it as the facts you will work
+with**:
 
-| Qué extraer | Por qué te importa |
+| What to extract | Why it matters |
 |---|---|
-| **Identidad** — nombre real del proyecto, qué hace, qué **no** es | Evita dar consejo de otro producto |
-| **Comandos y la puerta real de PR** | Nunca inventes el comando de test/typecheck/lint; el proyecto puede tener uno roto o uno extra |
-| **Capas y estructura de carpetas** con los nombres que usa este repo | Cada arquitectura tiene variantes; usa las suyas |
-| **Ruteo / navegación y guards** — dónde vive el árbol, qué protege qué | Es de lo más específico de cada proyecto |
-| **Reglas de estado** — qué es estado de sesión vs cache de servidor vs local | Colocarlo mal es un bug de arquitectura |
-| **Capa de API** — cliente(s), headers, tipos de error | No inventes un stack HTTP nuevo |
-| **Marca / theming** — tokens, cuántas marcas, cómo se seleccionan | Un valor hardcodeado rompe el white-label |
-| **i18n** — rutas de los catálogos, API (`t()` propio vs librería), namespaces | Las rutas cambian por proyecto |
-| **Convenciones de nombres, tests y formato** | Es lo que un reviewer debe exigir |
-| **Trampas conocidas** | Suelen ser cosas que parecen bugs y no lo son (typos que son contrato, código muerto, etc.) |
-| **Idioma de comentarios vs documentación** | Muchos repos separan uno del otro |
+| **Identity** — the project's real name, what it does, what it is **not** | Keeps you from giving advice meant for another product |
+| **Commands and the real PR gate** | Never invent the test/typecheck/lint command; a project may have a broken one, or an extra one |
+| **Layers and folder structure**, in the names this repo uses | Every architecture has variants; use theirs |
+| **Routing / navigation and guards** — where the tree lives, what protects what | Among the most project-specific things there is |
+| **State rules** — what is session state vs server cache vs local | Putting it in the wrong place is an architecture bug |
+| **API layer** — client(s), headers, error types | Do not invent a new HTTP stack |
+| **Brand / theming** — tokens, how many brands, how they are selected | A hardcoded value breaks white-labelling |
+| **i18n** — catalogue paths, the API (a local `t()` vs a library), namespaces | Paths change per project |
+| **Naming, test and formatting conventions** | This is what a reviewer must hold the code to |
+| **Known traps** | Usually things that look like bugs and are not (typos that are contract, dead code, etc.) |
+| **Comment language vs documentation language** | Many repos keep the two apart |
 
-## Verifica, no confíes
+## Verify, do not trust
 
-Cada hecho del `CLAUDE.md` que vaya a cambiar tu output, **compruébalo en el código**
-con el mínimo de lecturas: `Glob` la ruta que menciona, `Grep` el símbolo, lee el
-archivo. Basta una sonda por hecho.
+For every `CLAUDE.md` fact that will change your output, **confirm it in the code** with
+the fewest reads possible: `Glob` the path it mentions, `Grep` the symbol, read the
+file. One probe per fact is enough.
 
-Verifica **siempre** estos cuatro, porque son los que más se desactualizan y los que
-más daño hacen si están mal:
+**Always** verify these four, because they go stale the fastest and do the most damage
+when wrong:
 
-- La **puerta de PR** (¿existe el script en el manifiesto de dependencias? ¿el lint
-  está de verdad configurado, o solo instalado?).
-- El **árbol de rutas/navegación y sus guards** (léelo; no copies la tabla del doc).
-- Las **rutas de los catálogos de i18n** y su simetría.
-- Qué dependencias declaradas **de verdad se importan** desde el código fuente — los
-  repos acumulan dependencias muertas y docs que las describen como si se usaran.
+- The **PR gate** (does the script exist in the dependency manifest? is the linter
+  actually configured, or merely installed?).
+- The **route/navigation tree and its guards** (read it; do not copy the doc's table).
+- The **i18n catalogue paths** and their symmetry.
+- Which declared dependencies are **actually imported** from the source — repos
+  accumulate dead dependencies, and docs that describe them as if they were in use.
 
-## Anuncia con qué te fundaste
+## Announce what you grounded on
 
-**Primera línea de contenido de tu output**, siempre, para que el dev vea qué asumiste
-antes de leer el resto:
+**The first line of your output**, always, so the developer sees what you assumed before
+reading the rest:
 
 ```
-Proyecto: <nombre real> · stack: <huella detectada> · grounding: CLAUDE.md ✓ · desvíos: <lista o ninguno>
+Project: <real name> · stack: <detected fingerprint> · grounding: CLAUDE.md ✓ · deviations: <list or none>
 ```
 
-Si no hay `CLAUDE.md`, dilo (`grounding: sin CLAUDE.md — derivado del código`), trabaja
-solo desde el código con la doctrina de stack, marca tus conclusiones como inferidas, y
-sugiere al final que el equipo siembre uno con `/init`. **No inventes convenciones para
-llenar el hueco.**
+If there is no `CLAUDE.md`, say so (`grounding: no CLAUDE.md — derived from the code`),
+work from the code alone with the stack doctrine, mark your conclusions as inferred, and
+close by suggesting the team seed one with `/init`. **Do not invent conventions to fill
+the gap.**
 
-## Prohibido
+## Forbidden
 
-- **Arrastrar hechos de otro proyecto.** Nada de nombres de rutas, features, marcas,
-  endpoints o env vars que no hayas visto en *este* repo.
-- **Tratar los ejemplos de la doctrina de stack como si fueran este proyecto.** Son
-  ilustraciones del patrón, no rutas reales.
-- **Rellenar con lo "típico".** Si no lo encontraste, escribe
-  **"No determinado — inspecciona: `<dónde miraría>`"**. Un hueco honesto es útil; un
-  detalle inventado envenena todo lo que venga después.
+- **Carrying facts over from another project.** No route names, features, brands,
+  endpoints or env vars you have not seen in *this* repo.
+- **Treating the stack doctrine's examples as if they were this project.** They are
+  illustrations of the pattern, not real paths.
+- **Padding with what is "typical".** If you did not find it, write
+  **"Not determined — inspect: `<where I would look>`"**. An honest gap is useful; an
+  invented detail poisons everything that follows.
 <!-- @end plugins/common/standards/project-grounding.md -->
 
 ## Inputs

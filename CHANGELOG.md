@@ -68,6 +68,15 @@ o proyecto concreto, más un plugin nuevo escrito aquí.
 
 ### Fixed
 
+- **`project-grounding.md` estaba en español, y era el único standard que lo estaba.**
+  Los dos agentes de `laravel` son los únicos que lo componen, así que salían mezclados
+  (46 marcadores en español contra 80 en inglés) y **respondían en español**. Para un
+  marketplace comunitario eso es un defecto: un agente que le contesta en español a un
+  consumidor anglófono está roto. Traducido; ambos agentes quedan en inglés puro. Lo
+  detectó el primer `run-evals.mjs --run`, no una lectura — que es justo para lo que
+  sirven los evals. (`common` 1.5.0 → 1.5.1; al recomponer cambia el bloque dentro de
+  los dos agentes de Laravel, de ahí `laravel` 0.1.0 → 0.1.1)
+
 - **`.gitattributes` normaliza ahora todo el árbol con `* text=auto eol=lf`.** La regla
   estrecha heredada (solo `*.md` y `scripts/*.mjs`) dejaba fuera `.json`, `.js`, `.mjs`
   dentro de `plugins/`, `.html` y `.yml`; una escritura en masa desde una herramienta
