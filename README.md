@@ -38,7 +38,7 @@ demand** from their description, so an extra one costs nothing.
 
 ## Catalog
 
-### Common <sub>`common` · v1.5.1</sub>
+### Common <sub>`common` · v1.6.0</sub>
 
 Stack-agnostic Claude Code subagents (e.g. pr-reviewer) plus the universal standards layer (standards/) that the per-stack agents compose in.
 
@@ -48,7 +48,7 @@ Stack-agnostic Claude Code subagents (e.g. pr-reviewer) plus the universal stand
 | `/batch-review` | command | Review a wide diff (many changed files) by fanning out pr-reviewer across folder-scoped batches. |
 | `batch-review` | skill | Orchestrator playbook for reviewing a wide diff (many changed files) by fanning out a code-reviewer subagent across folder-scoped batches instead of one subagent per file. |
 
-### Python <sub>`python` · v0.2.4</sub>
+### Python <sub>`python` · v0.3.0</sub>
 
 Claude Code subagents for Python projects: implements tasks test-first inside a Hexagonal Architecture with Poetry-managed dependencies, and reviews changes for correctness, security, and architecture violations.
 

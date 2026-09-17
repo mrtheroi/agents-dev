@@ -16,7 +16,7 @@ o proyecto concreto, más un plugin nuevo escrito aquí.
 ### Added
 
 - **Marketplace `claude-dev-agents`** con tres plugins: `common`, `python` y `laravel`.
-- **`plugins/common` v1.4.0** — capa universal de standards (`code-review`,
+- **`plugins/common` v1.6.0** — capa universal de standards (`code-review`,
   `engineering-principles`, `subagent-contract`, `orchestration`,
   `changelog-versioning`) más el agente agnóstico `pr-reviewer`, el comando
   `/batch-review` y su skill.
@@ -24,12 +24,31 @@ o proyecto concreto, más un plugin nuevo escrito aquí.
   **código > `CLAUDE.md` del proyecto > doctrina de stack > conocimiento genérico**, y
   obliga a los agentes a *detectar* las convenciones del repo consumidor en vez de
   llevar hechos de un proyecto grabados. Es la pieza que permite que estos agentes
-  sirvan a cualquier repo.
-- **`plugins/python` v0.2.3** — `python-task-builder` (TDD estricto sobre arquitectura
+  sirvan a cualquier repo. **Lo componen los cinco subagentes**: con él, un agente deja
+  de suponer el layout y pasa a leer el `CLAUDE.md` del proyecto antes de tocar nada,
+  anunciando en su primera línea sobre qué se fundó. En `python-task-builder` hubo que
+  reconciliar el intro, que declaraba sus propias secciones «authoritative» y
+  contradecía esa precedencia.
+- **`plugins/python` v0.3.0** — `python-task-builder` (TDD estricto sobre arquitectura
   hexagonal) y `python-code-reviewer`.
+- **`plugins/laravel` v0.1.1** — `laravel-task-builder` y `laravel-code-reviewer`.
+  Laravel es en sí mismo una opinión, así que ambos agentes **detectan** el repo antes
+  de actuar: el escalón arquitectónico (canónico / service layer / hexagonal, leído del
+  `autoload.psr-4` de `composer.json`), la superficie (API-only / fullstack / híbrida) y
+  el runner (Pest o PHPUnit). A diferencia del de Python, el builder **no crea
+  estructura**: escribe dentro de la que encuentra, porque levantar un `app/Domain/` en
+  un repo canónico sería justo el acoplamiento que prohíbe la regla de oro.
+- **Neutralidad en tres niveles**, el principio que gobierna el plugin `laravel` y que
+  puede generalizarse a cualquier framework opinionado: **defecto** (rompe en cualquier
+  estilo — mass assignment, inyección SQL, `env()` fuera de `config/`, endpoint sin
+  autorización) se marca; **consecuencia** (N+1, excepciones que escapan del formateador
+  de errores, sobre JSON inconsistente) se reporta con su costo medible y **sin
+  veredicto**; **gusto** (trait vs handler, Pest vs PHPUnit, forma del sobre) se calla.
+  Cada regla del agente lleva su nivel etiquetado. Un hallazgo que dice qué *preferir*
+  no enseña nada; uno que muestra lo que el código *cuesta* deja decidir.
 - **Guardas de CI** en GitHub Actions: integridad del manifiesto, sincronía de la capa
-  de dos niveles, integridad de evals, **neutralidad de proyecto** y frescura del
-  catálogo.
+  de dos niveles, integridad de evals, **neutralidad de proyecto**, **bump de versión**
+  y frescura del catálogo.
 - **Primeros evals** — `laravel-code-reviewer` (3 casos) y `python-code-reviewer`
   (2 casos), con fixtures propios en `plugins/<stack>/evals/fixtures/*.diff`. El caso
   más importante es el de Laravel que verifica lo que el agente **NO** debe hacer:
