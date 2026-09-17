@@ -41,7 +41,14 @@ jobs:
       - name: Eval integrity
         run: node scripts/run-evals.mjs --check
 
-      # 4. Catalog is regenerated: rebuild, then fail if anything drifted from what
+      # 4. No private-organisation facts leaked into a community marketplace.
+      #    Runs the generic shape patterns only — the literal-term overlay
+      #    (.neutrality-local.json) is untracked by design and stays on the
+      #    contributor's machine, where it catches names before the push.
+      - name: Project neutrality
+        run: node scripts/check-neutrality.mjs
+
+      # 5. Catalog is regenerated: rebuild, then fail if anything drifted from what
       #    was committed (the "forgot to run build-catalog" case).
       - name: Catalog freshness
         run: |

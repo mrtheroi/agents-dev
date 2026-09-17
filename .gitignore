@@ -46,3 +46,6 @@ logs/
 # Coverage
 coverage/
 .coverage
+
+# Neutrality guard overlay (literal org terms — never commit)
+.neutrality-local.json

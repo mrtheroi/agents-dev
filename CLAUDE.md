@@ -112,8 +112,36 @@ pipeline:
 node scripts/check-manifest.mjs          # marketplace.json + cada plugin.json válidos; sin plugins huérfanos
 node scripts/compose-agents.mjs --check  # falla si algún agente/skill quedó desincronizado del estándar
 node scripts/run-evals.mjs --check       # valida evals: agente existe, @include resuelve, fixtures presentes
+node scripts/check-neutrality.mjs        # sin hechos privados de una organización
 node scripts/build-catalog.mjs           # y confirma con `git diff` limpio: catálogo regenerado
 ```
+
+### El guardián de neutralidad
+
+`check-neutrality.mjs` busca **formas** de fuga, no nombres: hostnames bajo dominios
+internos (`.local`, `.internal`, `.corp`, `.lan`), IPs privadas, credenciales con un
+valor que parece real, y direcciones de contacto fuera de los dominios reservados para
+documentación. Así protege contra organizaciones que este repo no conoce. Los patrones
+exactos están comentados en la cabecera del script.
+
+**Los nombres literales no están en el script a propósito** — escribirlos ahí
+publicaría justo la asociación que el guardián existe para evitar. Van en un
+`.neutrality-local.json` en la raíz, **sin versionar** (está en `.gitignore`), que el
+script lee si existe:
+
+```json
+{ "terms": ["acme", "acmecorp"], "allow": ["falso-positivo-conocido"] }
+```
+
+Los términos usan límite de palabra: el término `acme` no marca *acmecorp*. Eso es
+deliberado — un guardián con falsos positivos se vuelve ruido que la gente aprende a
+saltarse.
+
+Si cosechas material de un repo privado, siembra tu overlay **antes** de pegar nada: CI
+solo corre los patrones genéricos, el filtro de nombres corre en tu máquina.
+
+**No escribas un término real ni un hostname de ejemplo en esta guía.** Esta sección
+también se escanea, y la guarda no distingue una ilustración de una fuga — con razón.
 
 `run-evals.mjs --run` (gasta tokens, necesita el CLI `claude`) **no** es guarda de PR:
 córrelo manual o en schedule. Evals nuevos van en `plugins/<stack>/evals/<agent>.eval.json`.

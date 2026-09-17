@@ -28,7 +28,14 @@ o proyecto concreto, más un plugin nuevo escrito aquí.
 - **`plugins/python` v0.2.3** — `python-task-builder` (TDD estricto sobre arquitectura
   hexagonal) y `python-code-reviewer`.
 - **Guardas de CI** en GitHub Actions: integridad del manifiesto, sincronía de la capa
-  de dos niveles, integridad de evals y frescura del catálogo.
+  de dos niveles, integridad de evals, **neutralidad de proyecto** y frescura del
+  catálogo.
+- **`scripts/check-neutrality.mjs`** — quinta guarda. Detecta **formas** de fuga en vez
+  de nombres (hostnames internos, IPs privadas, credenciales con valor real, contactos
+  corporativos), de modo que protege contra organizaciones que este repo no conoce. Los
+  nombres literales viven en un `.neutrality-local.json` **sin versionar**: ponerlos en
+  el script publicaría la asociación que la guarda existe para evitar. Las coincidencias
+  usan límite de palabra, para que un guardián ruidoso no acabe ignorado.
 - **`CLAUDE.md`** con la guía de contribución, incluida la regla de neutralidad de
   proyecto.
 - **Publicación bajo licencia MIT** en `https://github.com/mrtheroi/agents-dev`. El
