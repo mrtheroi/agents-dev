@@ -11,6 +11,21 @@ plugin versiona por separado en su propio `plugin.json`.
 
 ### Added
 
+- **`security-checklist.md`** en `common/standards/`, cosechado del marketplace de origen
+  y neutralizado. Veinte filas OWASP, cada una con una columna **"Applies when"** que se
+  evalúa contra el cambio concreto, no en abstracto. Lo valioso no es la tabla sino el
+  protocolo: al **construir** hay que recorrer cada fila y confirmarla o declarar por qué
+  no aplica —saltarla en silencio está prohibido, porque una fila que no mencionas se lee
+  como una fila que no miraste—; al **revisar**, una fila aplicable sin atender es un
+  hallazgo. Todas sus filas son de nivel **defecto**, y el standard lo dice para que nadie
+  las degrade a consecuencia o a gusto. Lo componen los cinco subagentes.
+- **`db-change-request-template.md`** en `common/standards/`. Codifica una regla dura que
+  ningún builder tenía: **nunca corres una migración ni aplicas DDL**; documentas la
+  petición y paras. Un runner instalado y funcionando no es autorización para usarlo. En
+  repos cuyo ORM versiona las migraciones (Eloquent, Alembic, Django, Rails) distingue
+  **escribir el archivo de aplicarlo** —solo lo primero puede ser tuyo— y delega al
+  `CLAUDE.md` del consumidor quién lo escribe. Lo componen los dos task-builders; los
+  reviewers no, porque leen un diff y nunca necesitan cambiar un esquema.
 - **`[Unreleased]` en este CHANGELOG.** La 0.1.0 quedó congelada en el tag `v0.1.0`; lo
   que venga se acumula aquí. Mientras no existió el tag, todo se fue acumulando dentro
   de la 0.1.0 y sus números de versión quedaron desincronizados más de una vez.

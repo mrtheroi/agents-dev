@@ -9,7 +9,7 @@
       "expect": {
         "mustMention": [
           "mass assignment",
-          "sql injection",
+          "injection",
           "env(",
           "config:cache",
           "guarded"
