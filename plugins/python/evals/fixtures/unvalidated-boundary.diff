@@ -1,0 +1,23 @@
+diff --git a/src/shop/infrastructure/webhook_adapter.py b/src/shop/infrastructure/webhook_adapter.py
+--- a/src/shop/infrastructure/webhook_adapter.py
++++ b/src/shop/infrastructure/webhook_adapter.py
+@@ -1,3 +1,16 @@
+ import os
+ 
++
++def handle(payload: dict):
++    amount = float(payload["amount"])
++    currency = payload.get("currency", "USD")
++    account = payload["account"]["id"]
++
++    endpoint = os.environ["LEDGER_ENDPOINT"]
++
++    return {"amount": amount, "currency": currency, "account": account, "endpoint": endpoint}
+diff --git a/pyproject.toml b/pyproject.toml
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -12,6 +12,7 @@
+ [tool.poetry.dependencies]
+ python = "^3.12"
+ pydantic = "^2.7"
++httpx = "^0.27"

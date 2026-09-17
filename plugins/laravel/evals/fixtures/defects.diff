@@ -1,0 +1,44 @@
+diff --git a/app/Http/Controllers/OrderController.php b/app/Http/Controllers/OrderController.php
+--- a/app/Http/Controllers/OrderController.php
++++ b/app/Http/Controllers/OrderController.php
+@@ -1,6 +1,29 @@
+ <?php
+ 
+ namespace App\Http\Controllers;
+ 
++use App\Models\Order;
++use Illuminate\Http\Request;
++use Illuminate\Support\Facades\DB;
++
+ class OrderController extends Controller
+ {
++    public function store(Request $request)
++    {
++        $order = Order::create($request->all());
++
++        return response()->json($order, 200);
++    }
++
++    public function search(Request $request)
++    {
++        $term = $request->input('q');
++
++        return DB::table('orders')
++            ->whereRaw("customer_name LIKE '%{$term}%'")
++            ->get();
++    }
++
++    public function gateway()
++    {
++        return ['endpoint' => env('PAYMENTS_ENDPOINT')];
++    }
+ }
+diff --git a/app/Models/Order.php b/app/Models/Order.php
+--- a/app/Models/Order.php
++++ b/app/Models/Order.php
+@@ -7,4 +7,6 @@
+ class Order extends Model
+ {
++    protected $guarded = [];
++
+ }

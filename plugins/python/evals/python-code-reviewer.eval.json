@@ -1,0 +1,40 @@
+{
+  "agent": "python-code-reviewer",
+  "cases": [
+    {
+      "name": "flags the domain to infrastructure import, the mutable default argument and the swallowed exception",
+      "input": {
+        "file": "evals/fixtures/layering-and-mutable-default.diff"
+      },
+      "expect": {
+        "mustMention": [
+          "domain",
+          "infrastructure",
+          "mutable default",
+          "except"
+        ],
+        "mustNotMention": [
+          "looks good to commit",
+          "no issues found"
+        ]
+      }
+    },
+    {
+      "name": "flags the unvalidated boundary payload and the dependency added without poetry",
+      "input": {
+        "file": "evals/fixtures/unvalidated-boundary.diff"
+      },
+      "expect": {
+        "mustMention": [
+          "pydantic",
+          "poetry",
+          "pyproject"
+        ],
+        "mustNotMention": [
+          "looks good to commit",
+          "no issues found"
+        ]
+      }
+    }
+  ]
+}

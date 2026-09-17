@@ -1,0 +1,21 @@
+diff --git a/src/shop/domain/basket.py b/src/shop/domain/basket.py
+--- a/src/shop/domain/basket.py
++++ b/src/shop/domain/basket.py
+@@ -1,5 +1,18 @@
+ from dataclasses import dataclass
+ 
++from shop.infrastructure.postgres_basket_repository import PostgresBasketRepository
++
+ 
+ @dataclass
+ class Basket:
+     owner_id: str
++
++    def totals(self, lines=[]):
++        repo = PostgresBasketRepository()
++        try:
++            stored = repo.load(self.owner_id)
++        except Exception:
++            pass
++        lines.append(stored)
++        return sum(l.amount for l in lines)

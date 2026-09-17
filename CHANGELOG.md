@@ -30,6 +30,12 @@ o proyecto concreto, más un plugin nuevo escrito aquí.
 - **Guardas de CI** en GitHub Actions: integridad del manifiesto, sincronía de la capa
   de dos niveles, integridad de evals, **neutralidad de proyecto** y frescura del
   catálogo.
+- **Primeros evals** — `laravel-code-reviewer` (3 casos) y `python-code-reviewer`
+  (2 casos), con fixtures propios en `plugins/<stack>/evals/fixtures/*.diff`. El caso
+  más importante es el de Laravel que verifica lo que el agente **NO** debe hacer:
+  ante un controlador canónico correcto —Eloquent llamado desde el controlador, con
+  FormRequest, policy y eager loading— no puede reportar violación de capas ni exigir
+  un service layer. Es el eval que protege la decisión de neutralidad.
 - **`scripts/check-neutrality.mjs`** — quinta guarda. Detecta **formas** de fuga en vez
   de nombres (hostnames internos, IPs privadas, credenciales con valor real, contactos
   corporativos), de modo que protege contra organizaciones que este repo no conoce. Los

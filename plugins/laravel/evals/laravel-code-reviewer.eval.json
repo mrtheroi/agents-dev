@@ -1,0 +1,59 @@
+{
+  "agent": "laravel-code-reviewer",
+  "cases": [
+    {
+      "name": "defect tier \u2014 flags mass assignment, the interpolated whereRaw and env() outside config",
+      "input": {
+        "file": "evals/fixtures/defects.diff"
+      },
+      "expect": {
+        "mustMention": [
+          "mass assignment",
+          "sql injection",
+          "env(",
+          "config:cache",
+          "guarded"
+        ],
+        "mustNotMention": [
+          "looks good to commit",
+          "no issues found"
+        ]
+      }
+    },
+    {
+      "name": "consequence tier \u2014 quantifies the N+1 in the loop and the un-eager-loaded relation in the Resource, without prescribing an architecture",
+      "input": {
+        "file": "evals/fixtures/n-plus-one.diff"
+      },
+      "expect": {
+        "mustMention": [
+          "n+1",
+          "with(",
+          "whenloaded",
+          "quer"
+        ],
+        "mustNotMention": [
+          "looks good to commit",
+          "no issues found"
+        ]
+      }
+    },
+    {
+      "name": "taste tier \u2014 stays silent on a correct canonical controller instead of demanding a service or domain layer",
+      "input": {
+        "file": "evals/fixtures/canonical-controller.diff"
+      },
+      "expect": {
+        "mustMention": [
+          "looks good to commit"
+        ],
+        "mustNotMention": [
+          "violation",
+          "extract a service",
+          "move the query out",
+          "should not call eloquent"
+        ]
+      }
+    }
+  ]
+}

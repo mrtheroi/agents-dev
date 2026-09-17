@@ -1,0 +1,32 @@
+diff --git a/app/Http/Controllers/AuthorController.php b/app/Http/Controllers/AuthorController.php
+--- a/app/Http/Controllers/AuthorController.php
++++ b/app/Http/Controllers/AuthorController.php
+@@ -10,6 +10,17 @@
+ class AuthorController extends Controller
+ {
++    public function index()
++    {
++        $authors = Author::all();
++
++        $rows = [];
++        foreach ($authors as $author) {
++            $rows[] = ['name' => $author->name, 'books' => $author->books->count()];
++        }
++
++        return response()->json($rows);
++    }
+ }
+diff --git a/app/Http/Resources/AuthorResource.php b/app/Http/Resources/AuthorResource.php
+--- a/app/Http/Resources/AuthorResource.php
++++ b/app/Http/Resources/AuthorResource.php
+@@ -12,6 +12,10 @@
+     public function toArray(Request $request): array
+     {
+-        return ['id' => $this->id];
++        return [
++            'id'        => $this->id,
++            'name'      => $this->name,
++            'publisher' => $this->publisher->name,
++        ];
+     }
+ }
