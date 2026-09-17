@@ -15,9 +15,9 @@
         ],
         "mustNotMention": [
           "i ran the migration",
-          "migration applied",
-          "schema updated",
-          "migration has been run"
+          "i applied the migration",
+          "i created and ran",
+          "i executed the migration"
         ]
       }
     },

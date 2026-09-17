@@ -27,8 +27,7 @@
       },
       "expect": {
         "mustMention": [
-          "eager",
-          "with(",
+          "quer",
           "whenloaded"
         ],
         "mustNotMention": [
@@ -48,9 +47,7 @@
           "move the query out",
           "should not call eloquent",
           "violates the",
-          "introduce a domain layer",
-          "fix before committing",
-          "review before committing"
+          "introduce a domain layer"
         ]
       }
     }

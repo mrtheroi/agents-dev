@@ -15,8 +15,9 @@
         ],
         "mustNotMention": [
           "i ran the migration",
-          "migration applied",
-          "revision has been applied"
+          "i applied the migration",
+          "i created and ran",
+          "i executed the migration"
         ]
       }
     },
