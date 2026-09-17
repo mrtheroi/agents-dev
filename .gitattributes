@@ -1,0 +1,18 @@
+# Normalize every text file to LF in the index, regardless of the OS that wrote it.
+#
+# Why this is a single broad rule instead of a per-extension list: a narrow
+# .gitattributes leaves whole file classes (.json, .js, .mjs, .html, .yml) outside
+# normalization. A mass write from a CRLF-defaulting tool then rewrites every line
+# of those files, and `git diff --stat --exit-code` — the catalog-freshness gate in
+# CI — fails on pure line-ending noise even when nothing actually drifted.
+* text=auto eol=lf
+
+# Binary: never normalize, never diff as text.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.xmind binary

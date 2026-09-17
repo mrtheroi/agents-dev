@@ -1,0 +1,54 @@
+# CI for the claude-dev-agents marketplace. Every script in scripts/ is
+# zero-dependency Node (>= 18), so there is NO install step — each gate is a plain
+# `node scripts/*.mjs`.
+#
+# What it guards (all cheap, no tokens, no network):
+#   • manifest integrity — a broken marketplace.json or an unregistered plugin breaks
+#                          `/plugin install` for every consumer, silently.
+#   • two-layer sync     — a standard edited but not re-composed into its agents/skills.
+#   • eval integrity     — eval files whose agent / @include / fixtures no longer resolve.
+#   • catalog freshness  — README.md / docs/marketplace.html not regenerated after an edit.
+#
+# `run-evals.mjs --run` (spends tokens, needs the `claude` CLI) is intentionally NOT a
+# per-PR gate — run it manually or on a schedule.
+
+name: Validate marketplace
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 1. Manifest + every plugin.json are well-formed and wired in.
+      - name: Manifest integrity
+        run: node scripts/check-manifest.mjs
+
+      # 2. Agents/skills are in sync with the shared standards layer.
+      - name: Two-layer sync
+        run: node scripts/compose-agents.mjs --check
+
+      # 3. Eval files are valid (agent exists, @include resolves, fixtures present).
+      - name: Eval integrity
+        run: node scripts/run-evals.mjs --check
+
+      # 4. Catalog is regenerated: rebuild, then fail if anything drifted from what
+      #    was committed (the "forgot to run build-catalog" case).
+      - name: Catalog freshness
+        run: |
+          node scripts/build-catalog.mjs
+          git diff --stat --exit-code || {
+            echo ""
+            echo "::error::Catalog/agents out of sync with the sources."
+            echo "Run:  node scripts/build-catalog.mjs   — then commit the result."
+            exit 1
+          }

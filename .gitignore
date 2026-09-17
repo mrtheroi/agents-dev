@@ -1,0 +1,48 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Secrets
+*.pem
+*.key
+
+# Claude Code plugin state (generated: compose caches, skill registry, logs)
+.claude/
+.atl/
+
+# Node
+node_modules/
+dist/
+build/
+.npm/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# IDEs
+.vscode/
+.idea/
+.cursor/
+*.suo
+*.user
+
+# Windows reserved-name junk (e.g. stray "nul" from shell redirects)
+/nul
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Coverage
+coverage/
+.coverage

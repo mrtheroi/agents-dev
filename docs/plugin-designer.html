@@ -1,0 +1,396 @@
+<title>Plugin Designer · claude-dev-agents</title>
+<meta name="description" content="Visual form to design a new claude-dev-agents marketplace plugin and emit the JSON config that scripts/new-plugin.mjs materializes.">
+
+<style>
+  :root{
+    --ink:#14161e;--ink-2:#191c26;--ink-3:#1e2230;--line:#2a2f3d;--line-2:#3a4153;
+    --text:#ECE7DB;--text-dim:#9aa1b2;--text-faint:#6b7287;
+    --brand:#E8B341;--brand-soft:rgba(232,179,65,.14);
+    --sub:#E8B341;--cmd:#56C0CF;--skill:#86C06A;--script:#A593E8;--bad:#E0788F;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--brand);color:#1a1407}
+  :focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:4px}
+
+  .wrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0;min-height:100vh}
+  @media (max-width:920px){.wrap{grid-template-columns:1fr}}
+
+  /* ── form column ── */
+  .form{padding:34px 36px;overflow-x:hidden;border-right:1px solid var(--line);
+    background-image:radial-gradient(720px 420px at 12% -8%,rgba(232,179,65,.06),transparent 60%)}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-faint);margin:0 0 8px}
+  a.eyebrow.back{display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:color .15s}
+  a.eyebrow.back:hover{color:var(--brand)}
+  h1{font-family:var(--mono);font-weight:600;letter-spacing:-.02em;font-size:23px;margin:0 0 6px;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--brand)}
+  .lede{color:var(--text-dim);font-size:14px;margin:0 0 26px;max-width:60ch}
+
+  fieldset{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);margin:0 0 22px;padding:0;overflow:hidden}
+  legend{display:none}
+  .sec-head{display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid var(--line);position:relative}
+  .sec-head::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent,var(--brand))}
+  .sec-title{font-family:var(--mono);font-size:13px;letter-spacing:.02em;color:var(--text);font-weight:600}
+  .sec-count{font-family:var(--mono);font-size:11px;color:var(--text-faint);border:1px solid var(--line-2);border-radius:20px;padding:1px 8px;font-variant-numeric:tabular-nums}
+  .sec-body{padding:18px}
+
+  label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--text-dim);margin:0 0 6px;text-transform:uppercase}
+  .field{margin:0 0 15px}
+  .field:last-child{margin-bottom:0}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:560px){.row{grid-template-columns:1fr}}
+  input,textarea,select{width:100%;background:#0f1118;border:1px solid var(--line);border-radius:9px;
+    color:var(--text);font-family:var(--mono);font-size:13px;padding:9px 11px;line-height:1.5;transition:border-color .15s,background .15s}
+  input::placeholder,textarea::placeholder{color:var(--text-faint)}
+  input:focus,textarea:focus,select:focus{border-color:var(--brand);background:#12141c;outline:none}
+  textarea{resize:vertical;min-height:70px}
+  .hint{font-family:var(--sans);font-size:12px;color:var(--text-faint);margin:5px 0 0;text-transform:none;letter-spacing:0;font-weight:400}
+
+  .item{border:1px solid var(--line-2);border-radius:11px;padding:15px;margin:0 0 13px;background:var(--ink-3);position:relative}
+  .item-bar{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px}
+  .item-tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+    border:1px solid color-mix(in srgb,var(--accent) 40%,var(--line-2));border-radius:6px;padding:3px 8px}
+  .x{appearance:none;border:1px solid var(--line-2);background:transparent;color:var(--text-faint);
+    font-family:var(--mono);font-size:11px;cursor:pointer;border-radius:7px;padding:4px 9px;transition:.15s}
+  .x:hover{color:var(--bad);border-color:var(--bad)}
+  .empty{font-family:var(--sans);font-size:13px;color:var(--text-faint);font-style:italic;padding:2px 0 12px}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;color:var(--text-dim);
+    border:1px solid var(--line-2);border-radius:8px;padding:6px 10px;cursor:pointer;user-select:none;transition:.15s}
+  .chip input{width:auto;padding:0;margin:0;accent-color:var(--brand)}
+  .chip:hover{border-color:var(--brand);color:var(--text)}
+  .chip.on{border-color:var(--brand);color:var(--text);background:var(--brand-soft)}
+
+  .add{appearance:none;cursor:pointer;width:100%;background:transparent;border:1px dashed var(--line-2);
+    color:var(--text-dim);font-family:var(--mono);font-size:12px;padding:11px;border-radius:9px;transition:.15s}
+  .add:hover{border-color:var(--accent);color:var(--accent);border-style:solid}
+
+  /* ── output column ── */
+  .out{position:sticky;top:0;align-self:start;height:100vh;display:flex;flex-direction:column;background:#0f1118}
+  @media (max-width:920px){.out{position:static;height:auto}}
+  .out-head{padding:18px 22px 14px;border-bottom:1px solid var(--line)}
+  .out-head .eyebrow{margin-bottom:6px}
+  .out-file{font-family:var(--mono);font-size:13px;color:var(--text)}
+  .status{font-family:var(--sans);font-size:12.5px;margin:8px 0 0;display:flex;align-items:center;gap:7px}
+  .status .led{width:8px;height:8px;border-radius:50%;flex:none}
+  .status.ok{color:var(--skill)}.status.ok .led{background:var(--skill);box-shadow:0 0 0 3px color-mix(in srgb,var(--skill) 25%,transparent)}
+  .status.warn{color:var(--bad)}.status.warn .led{background:var(--bad);box-shadow:0 0 0 3px color-mix(in srgb,var(--bad) 25%,transparent)}
+
+  pre{margin:0;flex:1;overflow:auto;padding:18px 22px;font-family:var(--mono);font-size:12.5px;line-height:1.7;tab-size:2}
+  pre .k{color:var(--cmd)}pre .s{color:var(--skill)}pre .n{color:var(--script)}pre .p{color:var(--text-faint)}
+
+  .out-foot{border-top:1px solid var(--line);padding:16px 22px;display:flex;flex-direction:column;gap:12px}
+  .cmd-box{background:var(--ink-2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;
+    font-family:var(--mono);font-size:12px;color:var(--text-dim);overflow-x:auto;white-space:nowrap}
+  .cmd-box b{color:var(--brand);font-weight:400}
+  .btns{display:flex;gap:10px}
+  button.act{flex:1;appearance:none;cursor:pointer;font-family:var(--mono);font-size:12.5px;padding:11px;border-radius:9px;transition:.15s;border:1px solid var(--line-2);background:var(--ink-2);color:var(--text)}
+  button.act:hover{border-color:var(--brand);color:var(--brand)}
+  button.act.primary{background:var(--brand);border-color:var(--brand);color:#1a1407;font-weight:600}
+  button.act.primary:hover{background:#f0c25c}
+  button.act:disabled{opacity:.4;cursor:not-allowed}
+  button.act.primary:disabled:hover{background:var(--brand)}
+</style>
+
+<div class="wrap">
+  <form class="form" id="form" autocomplete="off">
+    <a class="eyebrow back" href="marketplace.html"><span aria-hidden="true">←</span> claude-dev-agents · catalog</a>
+    <h1>Plugin <em>Designer</em></h1>
+    <p class="lede">Design a new plugin and export the config that
+      <code>scripts/new-plugin.mjs</code> turns into a real <code>plugins/&lt;stack&gt;/</code> folder
+      — wired into <code>marketplace.json</code> and the catalog.</p>
+
+    <!-- identity -->
+    <fieldset>
+      <div class="sec-head"><span class="sec-title">Identity</span></div>
+      <div class="sec-body">
+        <div class="row">
+          <div class="field">
+            <label for="name">Plugin name <span style="color:var(--text-faint)">· install id</span></label>
+            <input id="name" placeholder="python" data-k="name">
+            <p class="hint">Lowercase kebab-case — what devs type to install.</p>
+          </div>
+          <div class="field">
+            <label for="display">Display name <span style="color:var(--text-faint)">· catalog headline</span></label>
+            <input id="display" placeholder="Python (auto)" data-k="display">
+            <p class="hint">Readable label shown in the catalog. Blank = derived.</p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="source">Source path</label>
+          <input id="source" placeholder="./plugins/python (auto)" data-k="source">
+          <p class="hint">Leave blank to derive from the name.</p>
+        </div>
+        <div class="field">
+          <label for="pdesc">Description</label>
+          <textarea id="pdesc" placeholder="Python stack subagents: scaffolding, pytest TDD and code review." data-k="pdesc"></textarea>
+          <p class="hint">Goes into <code>plugin.json</code> and the marketplace entry.</p>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="version">Version</label>
+            <input id="version" value="0.1.0" data-k="version">
+          </div>
+          <div class="field">
+            <label for="keywords">Keywords</label>
+            <input id="keywords" placeholder="python, pytest, backend" data-k="keywords">
+            <p class="hint">Comma-separated.</p>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- agents -->
+    <fieldset style="--accent:var(--sub)">
+      <div class="sec-head"><span class="sec-title">Agents</span><span class="sec-count" id="c-agents">0</span></div>
+      <div class="sec-body">
+        <div id="list-agents"></div>
+        <button type="button" class="add" data-add="agents">+ Add subagent</button>
+      </div>
+    </fieldset>
+
+    <!-- commands -->
+    <fieldset style="--accent:var(--cmd)">
+      <div class="sec-head"><span class="sec-title">Commands</span><span class="sec-count" id="c-commands">0</span></div>
+      <div class="sec-body">
+        <div id="list-commands"></div>
+        <button type="button" class="add" data-add="commands">+ Add slash command</button>
+      </div>
+    </fieldset>
+
+    <!-- skills -->
+    <fieldset style="--accent:var(--skill)">
+      <div class="sec-head"><span class="sec-title">Skills</span><span class="sec-count" id="c-skills">0</span></div>
+      <div class="sec-body">
+        <div id="list-skills"></div>
+        <button type="button" class="add" data-add="skills">+ Add skill</button>
+      </div>
+    </fieldset>
+
+    <!-- scripts -->
+    <fieldset style="--accent:var(--script)">
+      <div class="sec-head"><span class="sec-title">Scripts</span><span class="sec-count" id="c-scripts">0</span></div>
+      <div class="sec-body">
+        <div id="list-scripts"></div>
+        <button type="button" class="add" data-add="scripts">+ Add script</button>
+      </div>
+    </fieldset>
+  </form>
+
+  <aside class="out">
+    <div class="out-head">
+      <p class="eyebrow">Export</p>
+      <span class="out-file">plugin.json</span>
+      <p class="status" id="status"><span class="led"></span><span id="status-msg"></span></p>
+    </div>
+    <pre id="json" aria-live="polite"></pre>
+    <div class="out-foot">
+      <div class="cmd-box"><b>node</b> scripts/new-plugin.mjs --config plugin.json</div>
+      <div class="btns">
+        <button type="button" class="act" id="btn-cmd">Copy command</button>
+        <button type="button" class="act" id="btn-json">Copy JSON</button>
+        <button type="button" class="act primary" id="btn-dl">Download plugin.json</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+  const STANDARDS = [
+    {slug:'subagent-contract', label:'subagent-contract'},
+    {slug:'code-review', label:'code-review'},
+    {slug:'engineering-principles', label:'engineering-principles'},
+  ];
+  const state = {
+    meta:{name:'',display:'',source:'',pdesc:'',version:'0.1.0',keywords:''},
+    agents:[], commands:[], skills:[], scripts:[],
+  };
+
+  const $ = (s)=>document.querySelector(s);
+  const esc = (s)=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // ── factories ──
+  const blank = {
+    agents:()=>({name:'',description:'',tools:'',model:'inherit',body:'',includes:['subagent-contract']}),
+    commands:()=>({name:'',description:'',body:''}),
+    skills:()=>({name:'',description:'',body:''}),
+    scripts:()=>({filename:'',body:''}),
+  };
+
+  // ── render one item editor ──
+  function field(label, key, val, ph, kind, i, tag, multiline){
+    const id = `${kind}-${i}-${key}`;
+    const ctl = multiline
+      ? `<textarea id="${id}" data-kind="${kind}" data-i="${i}" data-key="${key}" placeholder="${esc(ph)}">${esc(val)}</textarea>`
+      : `<input id="${id}" data-kind="${kind}" data-i="${i}" data-key="${key}" value="${esc(val)}" placeholder="${esc(ph)}">`;
+    return `<div class="field"><label for="${id}">${label}</label>${ctl}</div>`;
+  }
+
+  function renderItem(kind, it, i){
+    let inner = '';
+    if(kind==='agents'){
+      inner =
+        `<div class="row">${field('Name','name',it.name,'py-code-reviewer',kind,i)}${field('Tools','tools',it.tools,'Read, Grep, Glob, Bash',kind,i)}</div>` +
+        field('Description','description',it.description,'Reviews the diff for bugs & convention violations.',kind,i,'',true) +
+        `<div class="field"><label for="${kind}-${i}-model">Model</label>
+          <select id="${kind}-${i}-model" data-kind="${kind}" data-i="${i}" data-key="model">
+            ${['inherit','opus','sonnet','haiku'].map(m=>`<option ${it.model===m?'selected':''}>${m}</option>`).join('')}
+          </select></div>` +
+        field('System prompt (body)','body',it.body,'You are the … subagent.\\n\\n## Role …',kind,i,'',true) +
+        `<div class="field"><label>Include standards</label><div class="chips">
+          ${STANDARDS.map(s=>{
+            const on = it.includes.includes(s.slug);
+            return `<label class="chip ${on?'on':''}"><input type="checkbox" data-inc="${kind}" data-i="${i}" data-slug="${s.slug}" ${on?'checked':''}>${s.label}</label>`;
+          }).join('')}
+        </div><p class="hint">Expanded in place by <code>compose-agents.mjs</code> via <code>@include</code>.</p></div>`;
+    } else if(kind==='commands'){
+      inner =
+        field('Name','name',it.name,'pytest',kind,i) +
+        field('Description','description',it.description,"Run the project's pytest suite.",kind,i,'',true) +
+        field('Body','body',it.body,'Runs `pytest $ARGUMENTS` and shows the output.',kind,i,'',true);
+    } else if(kind==='skills'){
+      inner =
+        field('Name','name',it.name,'py-tdd',kind,i) +
+        field('Description','description',it.description,'TDD playbook for Python.',kind,i,'',true) +
+        field('SKILL.md body','body',it.body,'# Python TDD\\n\\nRed-green-refactor with pytest.',kind,i,'',true);
+    } else if(kind==='scripts'){
+      inner =
+        field('Filename','filename',it.filename,'lint.mjs',kind,i) +
+        field('Body','body',it.body,'#!/usr/bin/env node\\nconsole.log("…")',kind,i,'',true);
+    }
+    const tag = {agents:'subagent',commands:'command',skills:'skill',scripts:'script'}[kind];
+    return `<div class="item"><div class="item-bar"><span class="item-tag">${tag} ${i+1}</span>
+      <button type="button" class="x" data-del="${kind}" data-i="${i}">Remove</button></div>${inner}</div>`;
+  }
+
+  function renderList(kind){
+    const list = state[kind];
+    const el = $(`#list-${kind}`);
+    el.innerHTML = list.length
+      ? list.map((it,i)=>renderItem(kind,it,i)).join('')
+      : `<p class="empty">No ${kind} yet — optional.</p>`;
+    $(`#c-${kind}`).textContent = list.length;
+  }
+  function renderAll(){ ['agents','commands','skills','scripts'].forEach(renderList); buildJSON(); }
+
+  // ── build config object (omit empties to match the script's expectations) ──
+  function clean(s){ return (s||'').trim(); }
+  function config(){
+    const m = state.meta;
+    const name = clean(m.name);
+    const plugin = {description:clean(m.pdesc), version:clean(m.version)||'0.1.0'};
+    const kw = clean(m.keywords).split(',').map(s=>s.trim()).filter(Boolean);
+    if(kw.length) plugin.keywords = kw;
+    const cfg = {name};
+    if(clean(m.display)) cfg.displayName = clean(m.display);
+    cfg.plugin = plugin;
+    if(clean(m.source)) cfg.source = clean(m.source);
+
+    const agents = state.agents.filter(a=>clean(a.name)).map(a=>{
+      const o = {name:clean(a.name), description:clean(a.description)};
+      if(clean(a.tools)) o.tools = clean(a.tools);
+      if(a.model && a.model!=='inherit') o.model = a.model;
+      if(clean(a.body)) o.body = a.body;
+      if(a.includes.length) o.includes = a.includes;
+      return o;
+    });
+    const commands = state.commands.filter(c=>clean(c.name)).map(c=>{
+      const o={name:clean(c.name)}; if(clean(c.description))o.description=clean(c.description); if(clean(c.body))o.body=c.body; return o;
+    });
+    const skills = state.skills.filter(s=>clean(s.name)).map(s=>{
+      const o={name:clean(s.name)}; if(clean(s.description))o.description=clean(s.description); if(clean(s.body))o.body=s.body; return o;
+    });
+    const scripts = state.scripts.filter(s=>clean(s.filename)).map(s=>{
+      const o={filename:clean(s.filename)}; if(clean(s.body))o.body=s.body; return o;
+    });
+    if(agents.length)cfg.agents=agents;
+    if(commands.length)cfg.commands=commands;
+    if(skills.length)cfg.skills=skills;
+    if(scripts.length)cfg.scripts=scripts;
+    return cfg;
+  }
+
+  // ── validation mirrors new-plugin.mjs ──
+  function validate(cfg){
+    if(!cfg.name) return 'Name is required.';
+    if(!/^[a-z0-9][a-z0-9-]*$/.test(cfg.name)) return 'Name must be lowercase kebab-case.';
+    if(!cfg.plugin.description) return 'Description is required.';
+    for(const a of (cfg.agents||[])) if(!a.description) return `Agent "${a.name}" needs a description.`;
+    return null;
+  }
+
+  // ── syntax-highlight the JSON preview ──
+  function highlight(json){
+    return esc(json).replace(/("(\\u[\da-fA-F]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d+)?)/g, (m)=>{
+      let cls='n';
+      if(/^"/.test(m)) cls = /:$/.test(m) ? 'k' : 's';
+      else if(/true|false|null/.test(m)) cls='p';
+      return `<span class="${cls}">${m}</span>`;
+    });
+  }
+
+  function buildJSON(){
+    const cfg = config();
+    const json = JSON.stringify(cfg, null, 2);
+    $('#json').innerHTML = highlight(json);
+    const err = validate(cfg);
+    const st = $('#status'), msg = $('#status-msg');
+    if(err){ st.className='status warn'; msg.textContent = err; }
+    else {
+      st.className='status ok';
+      const n = (cfg.agents||[]).length+(cfg.commands||[]).length+(cfg.skills||[]).length+(cfg.scripts||[]).length;
+      msg.textContent = `Valid — ${n} item${n===1?'':'s'} across the plugin. Ready to export.`;
+    }
+    $('#btn-json').disabled = !!err;
+    $('#btn-dl').disabled = !!err;
+    return json;
+  }
+
+  // ── events ──
+  $('#form').addEventListener('input', (e)=>{
+    const t = e.target;
+    if(t.dataset.k){ state.meta[t.dataset.k]=t.value; buildJSON(); return; }
+    if(t.dataset.kind){ state[t.dataset.kind][+t.dataset.i][t.dataset.key]=t.value; buildJSON(); }
+  });
+  $('#form').addEventListener('change', (e)=>{
+    const t = e.target;
+    if(t.dataset.inc){
+      const arr = state[t.dataset.inc][+t.dataset.i].includes, slug=t.dataset.slug;
+      if(t.checked){ if(!arr.includes(slug)) arr.push(slug); }
+      else { const k=arr.indexOf(slug); if(k>=0) arr.splice(k,1); }
+      t.closest('.chip').classList.toggle('on', t.checked);
+      buildJSON();
+    }
+  });
+  $('#form').addEventListener('click', (e)=>{
+    const add = e.target.closest('[data-add]');
+    if(add){ const k=add.dataset.add; state[k].push(blank[k]()); renderList(k); buildJSON(); return; }
+    const del = e.target.closest('[data-del]');
+    if(del){ state[del.dataset.del].splice(+del.dataset.i,1); renderList(del.dataset.del); buildJSON(); }
+  });
+
+  // bind identity inputs to state
+  document.querySelectorAll('[data-k]').forEach(el=>{ if(el.value) state.meta[el.dataset.k]=el.value; });
+
+  // ── export actions ──
+  function flash(btn, txt){ const o=btn.textContent; btn.textContent=txt; setTimeout(()=>btn.textContent=o, 1300); }
+  async function copy(text, btn){
+    try{ await navigator.clipboard.writeText(text); flash(btn,'Copied ✓'); }
+    catch{ const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); flash(btn,'Copied ✓'); }
+  }
+  $('#btn-json').addEventListener('click', (e)=>copy(buildJSON(), e.currentTarget));
+  $('#btn-cmd').addEventListener('click', (e)=>copy('node scripts/new-plugin.mjs --config plugin.json', e.currentTarget));
+  $('#btn-dl').addEventListener('click', ()=>{
+    const blob = new Blob([buildJSON()], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href=url; a.download='plugin.json'; a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // ── seed with one agent so the form isn't empty ──
+  state.agents.push(blank.agents());
+  renderAll();
+</script>

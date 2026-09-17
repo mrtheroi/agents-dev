@@ -1,0 +1,8 @@
+{
+  "name": "common",
+  "description": "Stack-agnostic Claude Code subagents (e.g. pr-reviewer) plus the universal standards layer (standards/) that the per-stack agents compose in.",
+  "version": "1.5.0",
+  "author": {
+    "name": "claude-dev-agents contributors"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "claude-dev-agents",
+  "version": "0.1.0",
+  "owner": {
+    "name": "claude-dev-agents contributors"
+  },
+  "plugins": [
+    {
+      "name": "common",
+      "displayName": "Common",
+      "source": "./plugins/common",
+      "description": "Stack-agnostic subagents shared by every project (e.g. pr-reviewer) plus the universal standards layer the per-stack agents compose in. Install this alongside your stack plugin."
+    },
+    {
+      "name": "python",
+      "displayName": "Python",
+      "source": "./plugins/python",
+      "description": "Subagents for Python projects: implements tasks test-first inside a Hexagonal Architecture, and reviews changes for correctness, security and architecture violations."
+    },
+    {
+      "name": "laravel",
+      "displayName": "Laravel",
+      "source": "./plugins/laravel",
+      "description": "Subagents for Laravel projects: implements tasks test-first inside whatever architecture the repo already uses, and reviews changes separating real defects from costs the author may not have measured."
+    }
+  ]
+}
