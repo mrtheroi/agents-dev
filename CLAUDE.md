@@ -161,6 +161,26 @@ saltarse.
 Si cosechas material de un repo privado, siembra tu overlay **antes** de pegar nada: CI
 solo corre los patrones genéricos, el filtro de nombres corre en tu máquina.
 
+**También escanea la identidad de git** — `user.name`/`user.email`, y el autor, committer
+y tagger de los commits que tu rama añade sobre la base. Ahí ocurrió una fuga real: seis
+commits salieron con una dirección de empresa heredada del `~/.gitconfig` global mientras
+la guarda daba el árbol por limpio.
+
+Dos límites que son reales, no descuidos:
+
+- **La identidad se coteja solo contra los términos del overlay.** Una dirección de
+  empresa y una personal tienen exactamente la misma forma —usuario, arroba, dominio—,
+  así que ninguna regex distingue cuál es cuál. Sin overlay no hay protección de
+  identidad, y el script lo dice en su salida en vez de insinuar una cobertura que no
+  da.
+- **Solo mira los commits NUEVOS desde la base**, nunca la historia entera. Una historia
+  ya publicada es una decisión que su dueño tomó, y una guarda que falla para siempre
+  sobre un pasado aceptado es una guarda que la gente apaga. El objetivo es atrapar el
+  siguiente antes de que salga.
+
+Arreglarlo es local al repo y solo afecta a commits nuevos; reescribir lo ya publicado es
+una decisión aparte y deliberada.
+
 **No escribas un término real ni un hostname de ejemplo en esta guía.** Esta sección
 también se escanea, y la guarda no distingue una ilustración de una fuga — con razón.
 

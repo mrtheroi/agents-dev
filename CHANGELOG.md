@@ -7,6 +7,29 @@ versionado sigue [Semantic Versioning](https://semver.org/lang/es/). La versión
 referencia de este archivo es el `version` de `.claude-plugin/marketplace.json`; cada
 plugin versiona por separado en su propio `plugin.json`.
 
+## [Unreleased]
+
+### Added
+
+- **`[Unreleased]` en este CHANGELOG.** La 0.1.0 quedó congelada en el tag `v0.1.0`; lo
+  que venga se acumula aquí. Mientras no existió el tag, todo se fue acumulando dentro
+  de la 0.1.0 y sus números de versión quedaron desincronizados más de una vez.
+
+### Fixed
+
+- **`check-neutrality.mjs` escanea ahora la identidad de git**, no solo archivos. Era un
+  punto ciego real: seis commits se publicaron con una dirección de empresa heredada del
+  `~/.gitconfig` global mientras la guarda reportaba el árbol limpio. Revisa
+  `user.name`/`user.email` y el autor, committer y tagger de los commits que la rama
+  añade sobre la base.
+
+  Dos límites deliberados, documentados en la salida del propio script: la identidad se
+  coteja **solo contra los términos del overlay local**, porque una dirección de empresa
+  y una personal tienen la misma forma y ninguna regex las distingue; y mira **solo los
+  commits nuevos**, nunca la historia entera, porque una historia ya publicada es una
+  decisión de su dueño y una guarda que falla para siempre sobre un pasado aceptado es
+  una guarda que se apaga.
+
 ## [0.1.0] — 2026-09-16
 
 Primera versión. El repo nace como hermano comunitario de un marketplace corporativo
@@ -118,4 +141,5 @@ o proyecto concreto, más un plugin nuevo escrito aquí.
   tokens de marca y catálogos de locales por rutas fijas de un proyecto concreto, así
   que no cumplía la regla de neutralidad aunque sus agentes ya fueran genéricos.
 
+[Unreleased]: https://github.com/mrtheroi/agents-dev/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/mrtheroi/agents-dev/releases/tag/v0.1.0
