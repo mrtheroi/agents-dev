@@ -7,6 +7,8 @@
 #                          `/plugin install` for every consumer, silently.
 #   • two-layer sync     — a standard edited but not re-composed into its agents/skills.
 #   • eval integrity     — eval files whose agent / @include / fixtures no longer resolve.
+#   • project neutrality — one organisation's private facts leaking into a public repo.
+#   • version bump       — a plugin whose content changed but whose version did not.
 #   • catalog freshness  — README.md / docs/marketplace.html not regenerated after an edit.
 #
 # `run-evals.mjs --run` (spends tokens, needs the `claude` CLI) is intentionally NOT a
@@ -23,7 +25,11 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
+      # fetch-depth: 0 — the version-bump gate needs history to diff against a
+      # baseline. A depth-1 clone has none, and that gate would only ever SKIP.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -41,14 +47,20 @@ jobs:
       - name: Eval integrity
         run: node scripts/run-evals.mjs --check
 
-      # 4. No private-organisation facts leaked into a community marketplace.
+      # 4. A plugin whose content changed declares a new version, or installed
+      #    consumers never receive the change. Editing a shared standard recomposes
+      #    several plugins at once — this is the gate that remembers that.
+      - name: Version bump
+        run: node scripts/check-version-bump.mjs
+
+      # 5. No private-organisation facts leaked into a community marketplace.
       #    Runs the generic shape patterns only — the literal-term overlay
       #    (.neutrality-local.json) is untracked by design and stays on the
       #    contributor's machine, where it catches names before the push.
       - name: Project neutrality
         run: node scripts/check-neutrality.mjs
 
-      # 5. Catalog is regenerated: rebuild, then fail if anything drifted from what
+      # 6. Catalog is regenerated: rebuild, then fail if anything drifted from what
       #    was committed (the "forgot to run build-catalog" case).
       - name: Catalog freshness
         run: |

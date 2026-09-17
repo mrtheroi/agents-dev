@@ -113,8 +113,29 @@ node scripts/check-manifest.mjs          # marketplace.json + cada plugin.json v
 node scripts/compose-agents.mjs --check  # falla si algún agente/skill quedó desincronizado del estándar
 node scripts/run-evals.mjs --check       # valida evals: agente existe, @include resuelve, fixtures presentes
 node scripts/check-neutrality.mjs        # sin hechos privados de una organización
+node scripts/check-version-bump.mjs      # plugin con contenido cambiado ⇒ versión nueva
 node scripts/build-catalog.mjs           # y confirma con `git diff` limpio: catálogo regenerado
 ```
+
+### La guarda del bump
+
+`check-version-bump.mjs` existe por el agujero que abre el propio modelo de dos capas:
+editas un standard, `compose-agents` reescribe **en silencio** todos los agentes que lo
+heredan —de varios plugins a la vez— y nada te recuerda que cada uno necesita subir su
+`version`. Un plugin cuya versión no se movió es un plugin que los consumidores
+instalados **nunca reciben**: el arreglo se publica, el catálogo se ve bien, CI queda en
+verde, y el bug sigue vivo en cada máquina que ya lo tenía.
+
+La regla es deliberadamente tosca: **cualquier** cambio bajo `plugins/<stack>/` exige que
+su `version` sea estrictamente mayor que en la base. Un cambio que solo sube la versión
+la cumple por construcción, así que la regla nunca pelea con un bump legítimo.
+
+Compara contra la base en este orden: `--base <ref>`, luego `origin/main` vía
+merge-base, luego `HEAD~1`. Si no hay ninguna —un clon shallow, o el primer commit—
+reporta **SKIP** y sale 0: una guarda que no puede ver su entrada lo dice, nunca reporta
+un pase que no verificó. Por eso el checkout de CI usa `fetch-depth: 0`.
+
+Compara contra el **árbol de trabajo**, así que sirve igual antes de commitear.
 
 ### El guardián de neutralidad
 

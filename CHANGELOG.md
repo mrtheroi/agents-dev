@@ -36,6 +36,13 @@ o proyecto concreto, más un plugin nuevo escrito aquí.
   ante un controlador canónico correcto —Eloquent llamado desde el controlador, con
   FormRequest, policy y eager loading— no puede reportar violación de capas ni exigir
   un service layer. Es el eval que protege la decisión de neutralidad.
+- **`scripts/check-version-bump.mjs`** — sexta guarda. Falla si un `plugins/<stack>/`
+  tiene contenido cambiado y su `plugin.json` no subió de versión. Tapa el agujero que
+  abre el modelo de dos capas: `compose-agents` propaga un cambio de standard a varios
+  plugins **en silencio**, y ninguna de las otras cinco guardas exige el bump — en esta
+  misma versión se escapó el de `laravel` y lo detectó una persona, no CI. Sin base de
+  comparación (clon shallow, primer commit) reporta **SKIP** en vez de un pase que no
+  verificó; por eso el checkout de CI pasó a `fetch-depth: 0`.
 - **`scripts/check-neutrality.mjs`** — quinta guarda. Detecta **formas** de fuga en vez
   de nombres (hostnames internos, IPs privadas, credenciales con valor real, contactos
   corporativos), de modo que protege contra organizaciones que este repo no conoce. Los
