@@ -38,7 +38,7 @@ demand** from their description, so an extra one costs nothing.
 
 ## Catalog
 
-### Common <sub>`common` · v1.7.0</sub>
+### Common <sub>`common` · v1.8.0</sub>
 
 Stack-agnostic Claude Code subagents (e.g. pr-reviewer) plus the universal standards layer (standards/) that the per-stack agents compose in.
 

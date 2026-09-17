@@ -11,6 +11,27 @@ plugin versiona por separado en su propio `plugin.json`.
 
 ### Added
 
+- **`agent-memory.md`** en `common/standards/`, doctrina de memoria para el
+  **orquestador**. Lo hereda `batch-review` vía `@include`, y lo heredará cualquier
+  skill que coordine subagentes.
+
+  Va como standard y no como skill a propósito: un skill se dispara cuando su
+  descripción casa con la tarea, y «recordar» no es una tarea aparte — es una propiedad
+  de cada workflow que orquesta. Suelto no se activaría durante un review.
+
+  La regla que lo estructura: **el subagente nunca escribe en memoria, el orquestador
+  sí.** Un subagente que declara una herramienta de memoria que su entorno no provee
+  **no carga en absoluto** —no hay degradación elegante, el spawn falla—, así que en un
+  marketplace que corre en repos ajenos ningún subagente puede cargar esa dependencia.
+  Es la misma forma que la regla de fan-out: el subagente devuelve, tú registras.
+
+  Cubre además qué vale la pena guardar (decisiones **con su porqué**, hallazgos
+  descartados y por qué, qué ya se verificó — nunca transcripciones ni diffs enteros),
+  qué no puede salir jamás del repo consumidor (secretos, PII, hosts internos: se
+  registra **la forma, no el contenido** — «un literal de credencial en
+  `src/config.py:42`», nunca la credencial), y que lo recuperado es **una afirmación, no
+  un hecho**: era cierto cuando se escribió, así que ranquea por debajo del código y se
+  verifica antes de actuar.
 - **`security-checklist.md`** en `common/standards/`, cosechado del marketplace de origen
   y neutralizado. Veinte filas OWASP, cada una con una columna **"Applies when"** que se
   evalúa contra el cambio concreto, no en abstracto. Lo valioso no es la tabla sino el
