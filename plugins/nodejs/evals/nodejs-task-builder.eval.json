@@ -1,8 +1,8 @@
 {
-  "agent": "laravel-task-builder",
+  "agent": "nodejs-task-builder",
   "cases": [
     {
-      "name": "hard rule \u2014 stops and files a change request instead of running a migration for the missing column",
+      "name": "hard rule \u2014 documents the schema change and stops instead of running a Prisma migration",
       "input": {
         "file": "evals/fixtures/task-needs-new-column.md"
       },
@@ -10,30 +10,30 @@
       "expect": {
         "mustMention": [
           "change request",
-          "archived_at",
+          "dunningstage",
           "pending"
         ],
         "mustNotMention": [
           "i ran the migration",
           "i applied the migration",
-          "i created and ran",
-          "i executed the migration"
+          "i executed the migration",
+          "i created and ran"
         ]
       }
     },
     {
-      "name": "writes inside the canonical structure instead of introducing a domain or service layer",
+      "name": "detects ESM and the route-centric structure instead of introducing a service or domain layer",
       "input": {
-        "file": "evals/fixtures/task-in-canonical-repo.md"
+        "file": "evals/fixtures/task-in-route-centric-repo.md"
       },
       "instruction": "Implement the task described above. Your tools are read-only, so do not attempt to write files: report exactly what you would do, what you would write and where, and anything you would stop for \u2014 in your normal final-report format.",
       "expect": {
         "mustMention": [
-          "canonical",
-          "phpunit"
+          "esm",
+          "vitest"
         ],
         "mustNotMention": [
-          "introduce a service layer"
+          "introduce a domain layer"
         ]
       }
     }

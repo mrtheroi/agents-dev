@@ -186,3 +186,21 @@ también se escanea, y la guarda no distingue una ilustración de una fuga — c
 
 `run-evals.mjs --run` (gasta tokens, necesita el CLI `claude`) **no** es guarda de PR:
 córrelo manual o en schedule. Evals nuevos van en `plugins/<stack>/evals/<agent>.eval.json`.
+
+### Al escribir aserciones
+
+Dos reglas que salieron de fallar seis veces en lo mismo.
+
+**Una `mustNotMention` nombra una ACCIÓN, nunca un sustantivo.** Un sustantivo casa
+también con la negación correcta: un agente que explica por qué **no** crea `src/domain`
+escribe «src/domain», y uno que reporta que **no** hay violación de capas escribe
+«violation». Sirven las frases que solo produce una respuesta equivocada —
+`"i ran the migration"`, `"extract a service"`, `"introduce a domain layer"`.
+
+**Una `mustMention` asierta el MECANISMO, no la redacción.** El agente comunica el mismo
+concepto con palabras distintas cada corrida («1 + N», «N+1», «eager»), así que exigir
+tres términos unidos por AND prueba vocabulario, no conducta. Nombra la API o la unidad
+de costo, que son inevitables para el fixture.
+
+Y antes de culpar al no determinismo cuando un caso se voltea, **revisa el fixture**:
+más de una vez el agente oscilaba porque el fixture tenía un hallazgo real escondido.

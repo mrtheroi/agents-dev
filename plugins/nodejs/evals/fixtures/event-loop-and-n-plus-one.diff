@@ -1,0 +1,31 @@
+diff --git a/src/routes/invoices.ts b/src/routes/invoices.ts
+--- a/src/routes/invoices.ts
++++ b/src/routes/invoices.ts
+@@ -1,6 +1,30 @@
+ import { Router } from 'express';
++import { readFileSync } from 'node:fs';
++import { prisma } from '../db';
+ 
+ export const invoices = Router();
+ 
++invoices.get('/', async (req, res) => {
++  const template = readFileSync('./templates/invoice.html', 'utf8');
++
++  const all = await prisma.invoice.findMany();
++
++  const rows = [];
++  for (const invoice of all) {
++    const customer = await prisma.customer.findUnique({
++      where: { id: invoice.customerId },
++    });
++    rows.push({ ...invoice, customerName: customer.name });
++  }
++
++  res.json({ template, rows });
++});
++
++invoices.get('/:id/pdf', async (req, res) => {
++  const upstream = await fetch(`${process.env.PDF_SERVICE}/render/${req.params.id}`);
++  const buffer = Buffer.from(await upstream.arrayBuffer());
++  res.type('application/pdf').send(buffer);
++});

@@ -1,0 +1,42 @@
+diff --git a/src/routes/books.ts b/src/routes/books.ts
+--- a/src/routes/books.ts
++++ b/src/routes/books.ts
+@@ -1,7 +1,42 @@
+ import { Router } from 'express';
++import { z } from 'zod';
++import { prisma } from '../db';
++import { requireAuth } from '../middleware/require-auth';
++import { can } from '../middleware/can';
+ 
+ export const books = Router();
+ 
++const createBook = z.object({
++  title: z.string().min(1).max(255),
++  authorId: z.string().uuid(),
++});
++
++books.get('/', requireAuth, can('books:read'), async (req, res, next) => {
++  try {
++    const page = Math.min(Number(req.query.limit ?? 25), 100);
++    const rows = await prisma.book.findMany({
++      take: page,
++      include: { author: { select: { id: true, name: true } } },
++    });
++    res.json({ data: rows });
++  } catch (err) {
++    next(err);
++  }
++});
++
++books.post('/', requireAuth, can('books:create'), async (req, res, next) => {
++  try {
++    const parsed = createBook.safeParse(req.body);
++    if (!parsed.success) {
++      return res.status(422).json({ errors: parsed.error.flatten() });
++    }
++    const book = await prisma.book.create({ data: parsed.data });
++    res.status(201).json({ data: book });
++  } catch (err) {
++    next(err);
++  }
++});

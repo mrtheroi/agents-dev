@@ -1,0 +1,36 @@
+diff --git a/src/routes/reports.ts b/src/routes/reports.ts
+--- a/src/routes/reports.ts
++++ b/src/routes/reports.ts
+@@ -1,8 +1,39 @@
+ import { Router } from 'express';
++import { exec } from 'node:child_process';
++import path from 'node:path';
++import fs from 'node:fs/promises';
++import { prisma } from '../db';
++import { audit } from '../audit';
+ 
+ export const reports = Router();
+ 
++reports.post('/generate', (req, res) => {
++  const { name, format } = req.body;
++
++  audit.record('report.generate', req.user.id);
++
++  exec(`/usr/bin/reportgen --format ${format} --out /tmp/${name}`, (err, stdout) => {
++    res.json({ output: stdout });
++  });
++});
++
++reports.get('/download', async (req, res) => {
++  const file = path.join('/var/reports', req.query.file as string);
++  const body = await fs.readFile(file);
++  res.send(body);
++});
++
++reports.get('/search', async (req, res) => {
++  const term = req.query.q as string;
++  const rows = await prisma.$queryRawUnsafe(
++    `SELECT * FROM reports WHERE title LIKE '%${term}%'`
++  );
++  res.json(rows);
++});

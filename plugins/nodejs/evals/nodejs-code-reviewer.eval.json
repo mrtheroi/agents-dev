@@ -1,0 +1,56 @@
+{
+  "agent": "nodejs-code-reviewer",
+  "cases": [
+    {
+      "name": "defect tier \u2014 flags the shell interpolation, the traversable path, the raw SQL template literal and the floating promise",
+      "input": {
+        "file": "evals/fixtures/defects.diff"
+      },
+      "expect": {
+        "mustMention": [
+          "injection",
+          "traversal",
+          "execfile"
+        ],
+        "mustNotMention": [
+          "looks good to commit",
+          "no issues found"
+        ]
+      }
+    },
+    {
+      "name": "consequence tier \u2014 costs the blocking read, the per-row query and the missing timeout, without prescribing a framework",
+      "input": {
+        "file": "evals/fixtures/event-loop-and-n-plus-one.diff"
+      },
+      "expect": {
+        "mustMention": [
+          "event loop",
+          "quer",
+          "timeout"
+        ],
+        "mustNotMention": [
+          "switch to fastify",
+          "use nestjs",
+          "adopt a repository pattern"
+        ]
+      }
+    },
+    {
+      "name": "taste tier \u2014 stays silent on an idiomatic Express route instead of demanding a service or domain layer",
+      "input": {
+        "file": "evals/fixtures/idiomatic-express-route.diff"
+      },
+      "expect": {
+        "mustNotMention": [
+          "extract a service",
+          "introduce a domain layer",
+          "move the query out",
+          "should not call prisma",
+          "switch to fastify",
+          "use nestjs"
+        ]
+      }
+    }
+  ]
+}

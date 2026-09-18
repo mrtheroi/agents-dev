@@ -11,7 +11,30 @@ plugin versiona por separado en su propio `plugin.json`.
 
 ### Added
 
-- **Evals para los cinco subagentes** — cobertura 5/5, diez casos. Los tres nuevos
+- **`plugins/nodejs` v0.1.0** — `nodejs-task-builder` y `nodejs-code-reviewer`, el
+  tercer backend del catálogo. Detecta framework (Express, Fastify, NestJS, Hono), ORM,
+  librería de validación y runner leyendo `package.json` y `tsconfig.json`, y sitúa al
+  repo en un escalón arquitectónico —por rutas, con capa de servicios, DI modular o por
+  capas— antes del primer hallazgo.
+
+  **El sistema de módulos es determinante, no cosmético.** `"type": "module"` significa
+  ESM: sin `require`, sin `__dirname`, imports con extensión, `await` de nivel superior.
+  Su ausencia significa CommonJS, donde ese `await` no existe. Una sugerencia que
+  confunda los dos produce código que ni siquiera carga, así que ambos agentes lo
+  detectan antes de escribir o proponer nada.
+
+  Defectos propios de este runtime, que ningún otro plugin cubre: una **promesa flotante**
+  —sin `await`, sin `.catch()`— **termina el proceso** desde Node 15; inyección de
+  comandos por `exec` con interpolación; recorrido de rutas con `path.join` sobre input
+  de usuario; y contaminación de prototipo al mezclar JSON parseado sin filtrar
+  `__proto__`. En consecuencias, **bloquear el event loop** es el hallazgo estrella: es
+  monohilo, así que un `readFileSync` en una ruta detiene *todas* las peticiones
+  concurrentes, no solo la suya.
+
+  Se eligió Node antes que React por una razón medible: es el tercer **backend**, así que
+  hereda tal cual las 14 filas de backend del checklist de seguridad, el freno de
+  migraciones y el task-builder con TDD. En React habría que inventar la mitad.
+- **Evals para los siete subagentes** — cobertura 7/7, quince casos. Los tres nuevos
   (`pr-reviewer`, `python-task-builder`, `laravel-task-builder`) cubren lo que más
   importa que no se silencie: que un builder **pare y documente** ante una columna que
   no existe en vez de improvisar una migración, que no invente `app/Domain/` en un repo

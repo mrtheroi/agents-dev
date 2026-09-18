@@ -46,7 +46,6 @@
           "extract a service",
           "move the query out",
           "should not call eloquent",
-          "violates the",
           "introduce a domain layer"
         ]
       }

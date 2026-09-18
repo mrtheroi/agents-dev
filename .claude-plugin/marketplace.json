@@ -22,6 +22,12 @@
       "displayName": "Laravel",
       "source": "./plugins/laravel",
       "description": "Subagents for Laravel projects: implements tasks test-first inside whatever architecture the repo already uses, and reviews changes separating real defects from costs the author may not have measured."
+    },
+    {
+      "name": "nodejs",
+      "displayName": "Node.js",
+      "source": "./plugins/nodejs",
+      "description": "Subagents for Node.js backend services: implements tasks test-first inside whatever framework and structure the repo already uses, and reviews changes separating real defects from costs the author may not have measured."
     }
   ]
 }

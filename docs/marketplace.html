@@ -111,12 +111,12 @@
       <div class="term-body">
 <div class="ln"><span class="pr">/</span>plugin marketplace add https://github.com/mrtheroi/agents-dev</div>
 <div class="ln"><span class="pr">/</span>plugin install python@claude-dev-agents</div>
-<div class="ln"><span class="ok">✓</span> installed <span class="cm"># 3 plugins · 5 subagents</span><span class="cursor"></span></div>
+<div class="ln"><span class="ok">✓</span> installed <span class="cm"># 4 plugins · 7 subagents</span><span class="cursor"></span></div>
       </div>
     </div>
     <div class="stats">
-      <div class="stat"><b>3</b><small>plugins</small></div>
-      <div class="stat"><b>5</b><small>subagents</small></div>
+      <div class="stat"><b>4</b><small>plugins</small></div>
+      <div class="stat"><b>7</b><small>subagents</small></div>
       <div class="stat"><b>1</b><small>commands</small></div>
       <div class="stat"><b>1</b><small>skills</small></div>
     </div>
@@ -165,13 +165,25 @@
 
     <section class="plugin" style="--accent:#86C06A">
       <div class="plugin-head">
-        <span class="dot"></span><span class="plugin-name">Laravel</span><span class="vpill">v0.2.2</span>
+        <span class="dot"></span><span class="plugin-name">Laravel</span><span class="vpill">v0.2.3</span>
         <span class="plugin-desc">Laravel subagents that detect the consumer repo's own architecture tier (canonical / service layer / hexagonal) and surface (API-only / fullstack) before acting: a test-first task builder and a code reviewer that reports defects plainly, quantifies consequences, and stays silent on taste.</span>
         <div class="install"><div class="cmd"><code><span class="pr">/</span>plugin install laravel@claude-dev-agents</code><button class="copy">Copy</button></div></div>
       </div>
       <div class="grid">
         <div class="card"><div class="card-top"><span class="card-name">laravel-code-reviewer</span><span class="kind sub">subagent</span></div><p>Reviews the staged changes (or a given set of files / diff range) of a Laravel codebase in its own isolated context.</p></div>
         <div class="card"><div class="card-top"><span class="card-name">laravel-task-builder</span><span class="kind sub">subagent</span></div><p>Implements ONE Laravel task (a use case, endpoint, job, or command) end to end, following strict TDD (Red-Green-Refactor) INSIDE the architecture the consumer repo already uses …</p></div>
+      </div>
+    </section>
+
+    <section class="plugin" style="--accent:#A593E8">
+      <div class="plugin-head">
+        <span class="dot"></span><span class="plugin-name">Node.js</span><span class="vpill">v0.1.0</span>
+        <span class="plugin-desc">Node.js backend subagents that detect the consumer repo's framework (Express, Fastify, NestJS, Hono), module system (ESM vs CommonJS), ORM and test runner before acting: a test-first task builder and a code reviewer that reports defects plainly, quantifies consequences, and stays silent on taste.</span>
+        <div class="install"><div class="cmd"><code><span class="pr">/</span>plugin install nodejs@claude-dev-agents</code><button class="copy">Copy</button></div></div>
+      </div>
+      <div class="grid">
+        <div class="card"><div class="card-top"><span class="card-name">nodejs-code-reviewer</span><span class="kind sub">subagent</span></div><p>Reviews the staged changes (or a given set of files / diff range) of a Node.js backend in its own isolated context.</p></div>
+        <div class="card"><div class="card-top"><span class="card-name">nodejs-task-builder</span><span class="kind sub">subagent</span></div><p>Implements ONE Node.js backend task (a use case, endpoint, job, or command) end to end, following strict TDD (Red-Green-Refactor) INSIDE the framework and structure the consumer…</p></div>
       </div>
     </section>
   </section>
@@ -193,6 +205,7 @@
         <div class="cmd"><code><span class="pr">/</span>plugin install common@claude-dev-agents</code><button class="copy">Copy</button></div>
         <div class="cmd"><code><span class="pr">/</span>plugin install python@claude-dev-agents</code><button class="copy">Copy</button></div>
         <div class="cmd"><code><span class="pr">/</span>plugin install laravel@claude-dev-agents</code><button class="copy">Copy</button></div>
+        <div class="cmd"><code><span class="pr">/</span>plugin install nodejs@claude-dev-agents</code><button class="copy">Copy</button></div>
       </div>
       <div class="step">
         <div class="step-h"><span class="step-n">3</span><h3>Auto-update for a whole team <span style="color:var(--text-faint);font-family:var(--mono);font-size:12px">· optional</span></h3></div>
