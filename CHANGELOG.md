@@ -9,6 +9,13 @@ plugin versiona por separado en su propio `plugin.json`.
 
 ## [Unreleased]
 
+Nada todavía.
+
+## [0.2.0] — 2026-09-19
+
+Segunda versión. Entra un cuarto plugin —el tercer backend— y el catálogo gana dos
+guardas de CI más, las dos nacidas de fallos reales y no de hipótesis.
+
 ### Added
 
 - **`plugins/nodejs` v0.1.0** — `nodejs-task-builder` y `nodejs-code-reviewer`, el
@@ -218,5 +225,6 @@ o proyecto concreto, más un plugin nuevo escrito aquí.
   tokens de marca y catálogos de locales por rutas fijas de un proyecto concreto, así
   que no cumplía la regla de neutralidad aunque sus agentes ya fueran genéricos.
 
-[Unreleased]: https://github.com/mrtheroi/agents-dev/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/mrtheroi/agents-dev/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/mrtheroi/agents-dev/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/mrtheroi/agents-dev/releases/tag/v0.1.0
