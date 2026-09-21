@@ -28,6 +28,12 @@
       "displayName": "Node.js",
       "source": "./plugins/nodejs",
       "description": "Subagents for Node.js backend services: implements tasks test-first inside whatever framework and structure the repo already uses, and reviews changes separating real defects from costs the author may not have measured."
+    },
+    {
+      "name": "java",
+      "displayName": "Java",
+      "source": "./plugins/java",
+      "description": "Subagents for Java backend services: implements tasks test-first inside whatever framework generation and structure the repo already uses, and reviews changes separating real defects from costs the author may not have measured."
     }
   ]
 }

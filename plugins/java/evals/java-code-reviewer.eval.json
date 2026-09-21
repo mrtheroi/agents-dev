@@ -1,0 +1,57 @@
+{
+  "agent": "java-code-reviewer",
+  "cases": [
+    {
+      "name": "defect tier \u2014 flags the polymorphic deserialization, the concatenated JPQL, the entity bound from the request body and the self-invoked @Transactional",
+      "input": {
+        "file": "evals/fixtures/defects.diff"
+      },
+      "expect": {
+        "mustMention": [
+          "deserial",
+          "injection",
+          "transactional",
+          "proxy"
+        ],
+        "mustNotMention": [
+          "looks good to commit",
+          "no issues found"
+        ]
+      }
+    },
+    {
+      "name": "consequence tier \u2014 costs the lazy-loading N+1, the unbounded findAll and the outbound call inside the transaction, without prescribing an architecture",
+      "input": {
+        "file": "evals/fixtures/lazy-loading-and-transaction.diff"
+      },
+      "expect": {
+        "mustMention": [
+          "quer",
+          "transaction",
+          "pageable"
+        ],
+        "mustNotMention": [
+          "extract a service",
+          "introduce a domain layer",
+          "switch to jooq"
+        ]
+      }
+    },
+    {
+      "name": "taste tier \u2014 stays silent on an idiomatic Spring endpoint instead of demanding a different structure or library",
+      "input": {
+        "file": "evals/fixtures/idiomatic-spring-endpoint.diff"
+      },
+      "expect": {
+        "mustNotMention": [
+          "extract a service",
+          "introduce a domain layer",
+          "should not use lombok",
+          "switch to jooq",
+          "use field injection",
+          "adopt hexagonal"
+        ]
+      }
+    }
+  ]
+}

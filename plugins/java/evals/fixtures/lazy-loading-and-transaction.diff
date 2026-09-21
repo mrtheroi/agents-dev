@@ -1,0 +1,32 @@
+diff --git a/src/main/java/com/acme/orders/OrderService.java b/src/main/java/com/acme/orders/OrderService.java
+--- a/src/main/java/com/acme/orders/OrderService.java
++++ b/src/main/java/com/acme/orders/OrderService.java
+@@ -8,6 +8,30 @@
+ @Service
+ public class OrderService {
+ 
++    @Transactional
++    public List<OrderSummary> summarise() {
++        List<Order> orders = orderRepository.findAll();
++
++        List<OrderSummary> out = new ArrayList<>();
++        for (Order order : orders) {
++            int lines = order.getLines().size();
++            out.add(new OrderSummary(order.getId(), lines));
++        }
++
++        notificationClient.post("/summaries/generated", out.size());
++
++        return out;
++    }
+ }
+diff --git a/src/main/java/com/acme/orders/Order.java b/src/main/java/com/acme/orders/Order.java
+--- a/src/main/java/com/acme/orders/Order.java
++++ b/src/main/java/com/acme/orders/Order.java
+@@ -12,6 +12,9 @@
+ public class Order {
+ 
++    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
++    private List<OrderLine> lines = new ArrayList<>();
++
+ }

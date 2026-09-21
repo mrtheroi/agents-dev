@@ -9,7 +9,33 @@ plugin versiona por separado en su propio `plugin.json`.
 
 ## [Unreleased]
 
-Nada todavía.
+### Added
+
+- **`plugins/java` v0.1.0** — `java-task-builder` y `java-code-reviewer`, el cuarto
+  backend. Java es el primer stack del catálogo con **dos generaciones conviviendo en
+  producción**, y esa es la detección que gobierna todo lo demás: el salto
+  `javax.*` → `jakarta.*` es incompatible, así que un `@Valid` con
+  `jakarta.validation` en un repo Spring Boot 2 **no compila**. Ambos agentes lo
+  resuelven con un grep de los imports reales —no infiriéndolo del número de versión,
+  porque un repo a medio migrar lleva los dos— antes de escribir o proponer nada.
+
+  Detecta además la herramienta de build (Maven o Gradle, que decide cada comando y
+  dónde se declaran las dependencias), el nivel de lenguaje (records y tipos sellados
+  no existen por debajo del suyo), la capa de persistencia y el stack de tests.
+
+  Defectos propios de la plataforma: **deserialización insegura** —`ObjectInputStream`
+  sobre datos ajenos, o Jackson con tipado polimórfico activado—, que es la vía clásica
+  de ejecución remota en Java y no una hipótesis; **XXE** por parsers XML con los
+  defaults inseguros; y un **`@Transactional` que el proxy no puede honrar** porque el
+  método es privado o se invoca desde el mismo bean — el código se lee transaccional y
+  no lo es. En consecuencias, el N+1 por carga perezosa y el *open session in view*.
+
+- **`changelog-versioning.md` aprende Java.** Fuentes de versión #5 (`pom.xml`) y #6
+  (`build.gradle`), con sus trampas: en un build multi-módulo hay que subir el módulo
+  que cambió, o la propiedad `revision` una sola vez si el build la usa; y en Gradle la
+  versión suele vivir en `gradle.properties`, salvo que un plugin de release la derive
+  del **tag de git**, en cuyo caso no hay literal que editar. (`common` 1.8.1 → 1.9.0;
+  al recomponer cambian los tres task-builders existentes, de ahí sus bumps.)
 
 ## [0.2.0] — 2026-09-19
 
