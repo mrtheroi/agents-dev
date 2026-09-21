@@ -1,0 +1,49 @@
+diff --git a/src/main/java/com/acme/books/BookController.java b/src/main/java/com/acme/books/BookController.java
+--- a/src/main/java/com/acme/books/BookController.java
++++ b/src/main/java/com/acme/books/BookController.java
+@@ -1,9 +1,46 @@
+ package com.acme.books;
+ 
++import jakarta.validation.Valid;
++import org.springframework.data.domain.Page;
++import org.springframework.data.domain.Pageable;
++import org.springframework.http.HttpStatus;
++import org.springframework.security.access.prepost.PreAuthorize;
++import org.springframework.web.bind.annotation.*;
++
+ @RestController
+ @RequestMapping("/books")
+ public class BookController {
+ 
++    private final BookService bookService;
++
++    public BookController(BookService bookService) {
++        this.bookService = bookService;
++    }
++
++    @GetMapping
++    @PreAuthorize("hasAuthority('books:read')")
++    public Page<BookResponse> list(Pageable pageable) {
++        return bookService.list(pageable);
++    }
++
++    @PostMapping
++    @ResponseStatus(HttpStatus.CREATED)
++    @PreAuthorize("hasAuthority('books:create')")
++    public BookResponse create(@Valid @RequestBody CreateBookRequest request) {
++        return bookService.create(request);
++    }
+ }
+diff --git a/src/main/java/com/acme/books/CreateBookRequest.java b/src/main/java/com/acme/books/CreateBookRequest.java
+--- a/src/main/java/com/acme/books/CreateBookRequest.java
++++ b/src/main/java/com/acme/books/CreateBookRequest.java
+@@ -1,4 +1,14 @@
+ package com.acme.books;
+ 
++import jakarta.validation.constraints.NotBlank;
++import jakarta.validation.constraints.Size;
++
++public record CreateBookRequest(
++        @NotBlank @Size(max = 255) String title,
++        @NotBlank String authorId) {
++}

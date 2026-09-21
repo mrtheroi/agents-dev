@@ -401,6 +401,22 @@ Follow [Semantic Versioning 2.0.0](https://semver.org/):
    entry or an `APP_VERSION` env var), that is the source — find it before
    assuming there is none.
 
+5. `pom.xml` → **Java / Maven**. The `<version>` of the project itself, not the
+   parent's. **Gotcha — a multi-module build**: the aggregator and the modules each
+   carry a version, and a module may inherit the parent's via `${revision}` or omit
+   it entirely. Bump the module whose code changed; if the build uses a
+   `revision` property for a single coordinated version, bump that property once.
+   `mvn versions:set` edits every module consistently — prefer it over hand-editing
+   several POMs.
+6. `build.gradle` / `build.gradle.kts` / `gradle.properties` → **Java / Gradle**.
+   The `version` is often declared as a property in `gradle.properties` rather than
+   in the build script; look there first. In a multi-project build, `settings.gradle`
+   lists the subprojects and the root may set the version for all of them.
+   **Gotcha**: a plugin such as `nebula-release` or `axion-release` can derive the
+   version from the **git tag**, in which case there is no literal to edit — the
+   release step is the tag, and hand-adding a `version =` line breaks it. Check the
+   plugins block before assuming.
+
 If multiple stacks coexist in one repo, each sub-project keeps its OWN
 version source — bump the one whose code actually changed.
 

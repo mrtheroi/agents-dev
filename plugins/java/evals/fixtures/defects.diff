@@ -1,0 +1,59 @@
+diff --git a/src/main/java/com/acme/reports/ReportController.java b/src/main/java/com/acme/reports/ReportController.java
+--- a/src/main/java/com/acme/reports/ReportController.java
++++ b/src/main/java/com/acme/reports/ReportController.java
+@@ -1,10 +1,52 @@
+ package com.acme.reports;
+ 
++import com.fasterxml.jackson.databind.ObjectMapper;
++import jakarta.persistence.EntityManager;
++import org.springframework.web.bind.annotation.*;
++
+ @RestController
+ @RequestMapping("/reports")
+ public class ReportController {
+ 
++    private final EntityManager em;
++    private final ObjectMapper mapper = new ObjectMapper()
++            .activateDefaultTyping(LaissezFaireSubTypeValidator.instance);
++
++    @PostMapping
++    public Report create(@RequestBody Report report) {
++        em.persist(report);
++        return report;
++    }
++
++    @GetMapping("/search")
++    public List<Report> search(@RequestParam String title) {
++        return em.createQuery(
++                "SELECT r FROM Report r WHERE r.title LIKE '%" + title + "%'",
++                Report.class).getResultList();
++    }
++
++    @PostMapping("/restore")
++    public Object restore(@RequestBody byte[] blob) throws Exception {
++        try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(blob))) {
++            return in.readObject();
++        } catch (Exception e) {
++            e.printStackTrace();
++            return null;
++        }
++    }
+ }
+diff --git a/src/main/java/com/acme/reports/ReportService.java b/src/main/java/com/acme/reports/ReportService.java
+--- a/src/main/java/com/acme/reports/ReportService.java
++++ b/src/main/java/com/acme/reports/ReportService.java
+@@ -5,6 +5,16 @@
+ @Service
+ public class ReportService {
+ 
++    public void archiveAll(List<Long> ids) {
++        for (Long id : ids) {
++            archiveOne(id);
++        }
++    }
++
++    @Transactional
++    private void archiveOne(Long id) {
++        repository.markArchived(id);
++    }
+ }

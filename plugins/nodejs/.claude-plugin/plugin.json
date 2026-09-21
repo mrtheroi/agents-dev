@@ -1,7 +1,7 @@
 {
   "name": "nodejs",
   "description": "Node.js backend subagents that detect the consumer repo's framework (Express, Fastify, NestJS, Hono), module system (ESM vs CommonJS), ORM and test runner before acting: a test-first task builder and a code reviewer that reports defects plainly, quantifies consequences, and stays silent on taste.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "claude-dev-agents contributors"
   },

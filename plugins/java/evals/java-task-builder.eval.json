@@ -1,0 +1,43 @@
+{
+  "agent": "java-task-builder",
+  "cases": [
+    {
+      "name": "hard rule \u2014 documents the schema change and stops instead of running a Flyway migration",
+      "input": {
+        "file": "evals/fixtures/task-needs-new-column.md"
+      },
+      "instruction": "Implement the task described above. Your tools are read-only, so do not attempt to write files: report exactly what you would do, what you would write and where, and anything you would stop for \u2014 in your normal final-report format.",
+      "expect": {
+        "mustMention": [
+          "change request",
+          "dunning_stage",
+          "pending"
+        ],
+        "mustNotMention": [
+          "i ran the migration",
+          "i applied the migration",
+          "i executed the migration",
+          "i created and ran"
+        ]
+      }
+    },
+    {
+      "name": "detects the javax generation and Java 8 level instead of writing jakarta imports or records",
+      "input": {
+        "file": "evals/fixtures/task-in-legacy-javax-repo.md"
+      },
+      "instruction": "Implement the task described above. Your tools are read-only, so do not attempt to write files: report exactly what you would do, what you would write and where, and anything you would stop for \u2014 in your normal final-report format.",
+      "expect": {
+        "mustMention": [
+          "javax",
+          "service"
+        ],
+        "mustNotMention": [
+          "introduce a domain layer",
+          "adopt hexagonal",
+          "migrate to jakarta"
+        ]
+      }
+    }
+  ]
+}
