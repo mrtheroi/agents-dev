@@ -9,6 +9,13 @@ plugin versiona por separado en su propio `plugin.json`.
 
 ## [Unreleased]
 
+Nada todavía.
+
+## [0.3.0] — 2026-09-21
+
+Entra Java, el cuarto backend, y con él el primer stack del catálogo que tiene **dos
+generaciones conviviendo en producción**.
+
 ### Added
 
 - **`plugins/java` v0.1.0** — `java-task-builder` y `java-code-reviewer`, el cuarto
@@ -251,6 +258,7 @@ o proyecto concreto, más un plugin nuevo escrito aquí.
   tokens de marca y catálogos de locales por rutas fijas de un proyecto concreto, así
   que no cumplía la regla de neutralidad aunque sus agentes ya fueran genéricos.
 
-[Unreleased]: https://github.com/mrtheroi/agents-dev/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/mrtheroi/agents-dev/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/mrtheroi/agents-dev/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/mrtheroi/agents-dev/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/mrtheroi/agents-dev/releases/tag/v0.1.0
