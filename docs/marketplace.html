@@ -118,7 +118,7 @@
       <div class="stat"><b>5</b><small>plugins</small></div>
       <div class="stat"><b>9</b><small>subagents</small></div>
       <div class="stat"><b>1</b><small>commands</small></div>
-      <div class="stat"><b>1</b><small>skills</small></div>
+      <div class="stat"><b>2</b><small>skills</small></div>
     </div>
     <a class="designer-cta" href="plugin-designer.html">🧩 Design a new plugin <span aria-hidden="true">→</span></a>
     <div class="side-foot">claude-dev-agents · marketplace of Claude Code subagents<br>claude-dev-agents contributors · https://github.com/mrtheroi/agents-dev</div>
@@ -140,7 +140,7 @@
 
     <section class="plugin" style="--accent:#E8B341">
       <div class="plugin-head">
-        <span class="dot"></span><span class="plugin-name">Common</span><span class="vpill">v1.10.0</span>
+        <span class="dot"></span><span class="plugin-name">Common</span><span class="vpill">v1.11.0</span>
         <span class="plugin-desc">Stack-agnostic Claude Code subagents (e.g. pr-reviewer) plus the universal standards layer (standards/) that the per-stack agents compose in.</span>
         <div class="install"><div class="cmd"><code><span class="pr">/</span>plugin install common@claude-dev-agents</code><button class="copy">Copy</button></div></div>
       </div>
@@ -148,12 +148,13 @@
         <div class="card"><div class="card-top"><span class="card-name">pr-reviewer</span><span class="kind sub">subagent</span></div><p>Reviews the current git diff for correctness bugs and quick cleanups.</p></div>
         <div class="card"><div class="card-top"><span class="card-name"><span class="sl">/</span>batch-review</span><span class="kind">command</span></div><p>Review a wide diff (many changed files) by fanning out pr-reviewer across folder-scoped batches.</p></div>
         <div class="card"><div class="card-top"><span class="card-name">batch-review</span><span class="kind">skill</span></div><p>Orchestrator playbook for reviewing a wide diff (many changed files) by fanning out a code-reviewer subagent across folder-scoped batches instead of one subagent per file.</p></div>
+        <div class="card"><div class="card-top"><span class="card-name">context-notes</span><span class="kind">skill</span></div><p>Orchestrator playbook for leaving a finding behind in the consumer repo so the next person — or the next session — does not re-derive it.</p></div>
       </div>
     </section>
 
     <section class="plugin" style="--accent:#6FB3D9">
       <div class="plugin-head">
-        <span class="dot"></span><span class="plugin-name">Python</span><span class="vpill">v0.5.0</span>
+        <span class="dot"></span><span class="plugin-name">Python</span><span class="vpill">v0.6.0</span>
         <span class="plugin-desc">Claude Code subagents for Python projects: implements tasks test-first inside a Hexagonal Architecture with Poetry-managed dependencies, and reviews changes for correctness, security, and architecture violations.</span>
         <div class="install"><div class="cmd"><code><span class="pr">/</span>plugin install python@claude-dev-agents</code><button class="copy">Copy</button></div></div>
       </div>
@@ -165,7 +166,7 @@
 
     <section class="plugin" style="--accent:#86C06A">
       <div class="plugin-head">
-        <span class="dot"></span><span class="plugin-name">Laravel</span><span class="vpill">v0.3.0</span>
+        <span class="dot"></span><span class="plugin-name">Laravel</span><span class="vpill">v0.4.0</span>
         <span class="plugin-desc">Laravel subagents that detect the consumer repo's own architecture tier (canonical / service layer / hexagonal) and surface (API-only / fullstack) before acting: a test-first task builder and a code reviewer that reports defects plainly, quantifies consequences, and stays silent on taste.</span>
         <div class="install"><div class="cmd"><code><span class="pr">/</span>plugin install laravel@claude-dev-agents</code><button class="copy">Copy</button></div></div>
       </div>
@@ -177,7 +178,7 @@
 
     <section class="plugin" style="--accent:#A593E8">
       <div class="plugin-head">
-        <span class="dot"></span><span class="plugin-name">Node.js</span><span class="vpill">v0.2.0</span>
+        <span class="dot"></span><span class="plugin-name">Node.js</span><span class="vpill">v0.3.0</span>
         <span class="plugin-desc">Node.js backend subagents that detect the consumer repo's framework (Express, Fastify, NestJS, Hono), module system (ESM vs CommonJS), ORM and test runner before acting: a test-first task builder and a code reviewer that reports defects plainly, quantifies consequences, and stays silent on taste.</span>
         <div class="install"><div class="cmd"><code><span class="pr">/</span>plugin install nodejs@claude-dev-agents</code><button class="copy">Copy</button></div></div>
       </div>
@@ -189,7 +190,7 @@
 
     <section class="plugin" style="--accent:#56C0CF">
       <div class="plugin-head">
-        <span class="dot"></span><span class="plugin-name">Java</span><span class="vpill">v0.2.0</span>
+        <span class="dot"></span><span class="plugin-name">Java</span><span class="vpill">v0.3.0</span>
         <span class="plugin-desc">Java backend subagents that detect the consumer repo's build tool (Maven or Gradle), framework generation (javax / Java EE vs jakarta / Jakarta EE), language level, persistence layer and test stack before acting: a test-first task builder and a code reviewer that reports defects plainly, quantifies consequences, and stays silent on taste.</span>
         <div class="install"><div class="cmd"><code><span class="pr">/</span>plugin install java@claude-dev-agents</code><button class="copy">Copy</button></div></div>
       </div>
