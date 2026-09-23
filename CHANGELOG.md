@@ -11,6 +11,40 @@ plugin versiona por separado en su propio `plugin.json`.
 
 ### Added
 
+- **`context-notes`**, un skill para el orquestador: dejar un hallazgo en el repo del
+  consumidor para que el siguiente —persona o sesión— no lo vuelva a deducir. Y ocho
+  líneas en `project-grounding` para **leerlos** antes de tocar un área.
+
+  La barra es lo importante, y separa esto de un registro de actividad: **se guardan
+  hallazgos, no lo que se hizo.** El diff y el PR ya cuentan lo segundo. Cuatro formas
+  casi siempre la pasan: una **decisión de NO actuar** —la de mayor valor, porque sin
+  ella alguien "arregla" en dos minutos algo que el equipo dejó quieto a propósito—, una
+  **trampa** que se lee mal y está bien, un **callejón ya recorrido**, y un **modelo
+  mental que el repo contradice**.
+
+  Un hallazgo, un archivo. El lector paga solo el que necesita, y dos personas trabajando
+  en cosas distintas nunca tocan el mismo archivo. La recuperación es un `grep` sobre el
+  frontmatter `triggers:` —los símbolos y textos de error con los que uno se topa—, así
+  que **no hay archivo de índice**: lo que no coincide cuesta cero. Anclar a símbolos y
+  no a números de línea, porque una nota con coordenadas equivocadas envenena más de lo
+  que ayuda.
+
+  El skill también fija **qué no puede entrar nunca**: secretos, PII, hosts internos, el
+  nombre del repo privado de otra organización. Se registra **la forma, no el contenido**
+  — «un literal de credencial en el cargador de config» es el hallazgo; la credencial no.
+  No es hipotético: exportar sin filtrar unas notas de trabajo corrientes destapó una
+  dirección de empresa y el nombre de un repositorio privado ajeno.
+
+  La doctrina de escritura vive en el skill —cargado bajo demanda, **cero costo** para los
+  nueve agentes— y solo la regla de lectura entra en el standard que ya se paga.
+  (`common` 1.9.0 → 1.11.0, y minor en los cuatro plugins de stack: sus agentes ganan un
+  paso de lectura nuevo.)
+
+  Nota al margen, porque es la prueba de que la guarda sirve: escribir el hallazgo
+  *«editar un standard cambia varios plugins en silencio»* y acto seguido olvidar los
+  cuatro bumps al editar `project-grounding`. `check-version-bump` lo atrapó — la cuarta
+  vez que atrapa al autor, siempre antes del commit.
+
 - **`build-discipline.md`** en `common/standards/` — la disciplina de quien escribe
   código, en un solo lugar. La componen los cuatro task-builders.
 

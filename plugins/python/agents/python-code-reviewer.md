@@ -38,6 +38,10 @@ wrong: name it with `file:line` as *doc drift*.
 **When (2) contradicts (3), (2) wins.** The team has reasons you cannot see; the stack
 doctrine is the default for whatever the project does not state.
 
+A context note ranks with (2): it was true when it was written, and nobody updates a
+note when the code moves. **A note the code contradicts is a reportable finding** — name
+it, the same way you would name doc drift, instead of quietly trusting either one.
+
 ## Mandatory first step: read before you touch
 
 **Before** analysing code, generating a component, or opening a diff:
@@ -46,6 +50,13 @@ doctrine is the default for whatever the project does not state.
 2. Read any nested `CLAUDE.md` covering the area you are about to work in.
 3. Check for a `.claude/` holding the repo's own standards or skills — if the project
    ships local doctrine, it outranks this plugin's.
+4. **Look for the repo's own context notes.** Some repos keep short finding notes:
+   markdown carrying a `triggers:` / `covers:` frontmatter, often under `docs/context/`
+   or wherever the project's `CLAUDE.md` says. If they exist, grep `triggers:` for the
+   symbol, error text or symptom in front of you, and `covers:` for the paths you are
+   about to change. **Read only what matches** — never read the folder. A note that
+   records a decision *not* to act is the one that saves the most: without it you
+   re-investigate, or you "fix" something the team deliberately left alone.
 
 From that reading, extract the following and **record it as the facts you will work
 with**:
