@@ -9,7 +9,34 @@ plugin versiona por separado en su propio `plugin.json`.
 
 ## [Unreleased]
 
-Nada todavía.
+### Added
+
+- **`build-discipline.md`** en `common/standards/` — la disciplina de quien escribe
+  código, en un solo lugar. La componen los cuatro task-builders.
+
+  Nace de un defecto en la estructura del propio repo: **el bucle TDD estaba escrito a
+  mano cuatro veces, con cuatro redacciones distintas**. Justo lo que el modelo de dos
+  capas existe para evitar. Endurecer el paso RED exigía editar cuatro archivos y confiar
+  en no divergir — y ya habían divergido.
+
+  Recoge además lo que faltaba: convertir tareas vagas en **objetivos verificables**
+  antes de escribir, decir en voz alta si existe un **enfoque más simple**, el autocheck
+  de *«¿un ingeniero con experiencia llamaría a esto sobrecomplicado?»*, y no escribir
+  manejo de errores para **escenarios que no pueden ocurrir** —se lee como si pudieran, y
+  el próximo lector lo conserva para siempre—.
+
+### Changed
+
+- **Un comportamiento que no se puede testear ya NO detiene al builder.** La regla
+  anterior mandaba parar; ahora manda **escribirlo y declararlo**: qué quedó sin cubrir,
+  por qué resiste al test, y qué haría falta para cubrirlo (una costura, un reloj
+  inyectado, un doble para la llamada externa). Un hueco declarado es información útil;
+  uno silencioso se lee como cobertura que no existe, que es peor que no tener test.
+
+  Parar queda reservado para la **ambigüedad real**: cuando dos lecturas de la tarea dan
+  código distinto y construir la equivocada desperdicia el trabajo.
+
+  (`common` 1.9.0 → 1.10.0 y minor en los cuatro builders: su comportamiento cambia.)
 
 ## [0.3.0] — 2026-09-21
 

@@ -1,7 +1,7 @@
 {
   "name": "java",
   "description": "Java backend subagents that detect the consumer repo's build tool (Maven or Gradle), framework generation (javax / Java EE vs jakarta / Jakarta EE), language level, persistence layer and test stack before acting: a test-first task builder and a code reviewer that reports defects plainly, quantifies consequences, and stays silent on taste.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "claude-dev-agents contributors"
   },

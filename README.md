@@ -40,7 +40,7 @@ demand** from their description, so an extra one costs nothing.
 
 ## Catalog
 
-### Common <sub>`common` · v1.9.0</sub>
+### Common <sub>`common` · v1.10.0</sub>
 
 Stack-agnostic Claude Code subagents (e.g. pr-reviewer) plus the universal standards layer (standards/) that the per-stack agents compose in.
 
@@ -50,7 +50,7 @@ Stack-agnostic Claude Code subagents (e.g. pr-reviewer) plus the universal stand
 | `/batch-review` | command | Review a wide diff (many changed files) by fanning out pr-reviewer across folder-scoped batches. |
 | `batch-review` | skill | Orchestrator playbook for reviewing a wide diff (many changed files) by fanning out a code-reviewer subagent across folder-scoped batches instead of one subagent per file. |
 
-### Python <sub>`python` · v0.4.3</sub>
+### Python <sub>`python` · v0.5.0</sub>
 
 Claude Code subagents for Python projects: implements tasks test-first inside a Hexagonal Architecture with Poetry-managed dependencies, and reviews changes for correctness, security, and architecture violations.
 
@@ -59,7 +59,7 @@ Claude Code subagents for Python projects: implements tasks test-first inside a 
 | `python-code-reviewer` | subagent | Reviews the staged changes (or a given set of files / diff range) of this Python backend for correctness bugs, security issues, and violations of Hexagonal Architecture or Strict… |
 | `python-task-builder` | subagent | Implements ONE Python task (a use case, endpoint, or feature) end to end in this backend, following strict TDD (Red-Green-Refactor) and Hexagonal Architecture (domain /… |
 
-### Laravel <sub>`laravel` · v0.2.4</sub>
+### Laravel <sub>`laravel` · v0.3.0</sub>
 
 Laravel subagents that detect the consumer repo's own architecture tier (canonical / service layer / hexagonal) and surface (API-only / fullstack) before acting: a test-first task builder and a code reviewer that reports defects plainly, quantifies consequences, and stays silent on taste.
 
@@ -68,7 +68,7 @@ Laravel subagents that detect the consumer repo's own architecture tier (canonic
 | `laravel-code-reviewer` | subagent | Reviews the staged changes (or a given set of files / diff range) of a Laravel codebase in its own isolated context. |
 | `laravel-task-builder` | subagent | Implements ONE Laravel task (a use case, endpoint, job, or command) end to end, following strict TDD (Red-Green-Refactor) INSIDE the architecture the consumer repo already uses … |
 
-### Node.js <sub>`nodejs` · v0.1.1</sub>
+### Node.js <sub>`nodejs` · v0.2.0</sub>
 
 Node.js backend subagents that detect the consumer repo's framework (Express, Fastify, NestJS, Hono), module system (ESM vs CommonJS), ORM and test runner before acting: a test-first task builder and a code reviewer that reports defects plainly, quantifies consequences, and stays silent on taste.
 
@@ -77,7 +77,7 @@ Node.js backend subagents that detect the consumer repo's framework (Express, Fa
 | `nodejs-code-reviewer` | subagent | Reviews the staged changes (or a given set of files / diff range) of a Node.js backend in its own isolated context. |
 | `nodejs-task-builder` | subagent | Implements ONE Node.js backend task (a use case, endpoint, job, or command) end to end, following strict TDD (Red-Green-Refactor) INSIDE the framework and structure the consumer… |
 
-### Java <sub>`java` · v0.1.0</sub>
+### Java <sub>`java` · v0.2.0</sub>
 
 Java backend subagents that detect the consumer repo's build tool (Maven or Gradle), framework generation (javax / Java EE vs jakarta / Jakarta EE), language level, persistence layer and test stack before acting: a test-first task builder and a code reviewer that reports defects plainly, quantifies consequences, and stays silent on taste.
 

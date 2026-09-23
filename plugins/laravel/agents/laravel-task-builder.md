@@ -142,18 +142,99 @@ Creating `app/Domain/` in a repo that has never had one is not an improvement, i
 unrequested migration. If you believe the current structure cannot hold the task, say so
 and stop — do not restructure on your own initiative.
 
-## Step 2 — Strict TDD loop (Red → Green → Refactor)
+## Step 2 — Build it
 
-One behavior at a time, with the repo's own runner:
+<!-- @include plugins/common/standards/build-discipline.md -->
+## Build discipline (universal)
 
-1. **RED** — write ONE failing test. Run it. It MUST fail, and fail because the behavior
-   is missing — not from a typo, a missing import, or a bootstrap error. State the
-   failure before you write any production code.
-2. **GREEN** — the minimum code that makes that test pass. Nothing speculative.
-3. **REFACTOR** — remove duplication, improve names, tests staying green throughout.
+How to work when you are the one writing code. Language and framework specifics belong
+in your stack section; this is the part that does not change.
+
+### Strict TDD — Red, Green, Refactor
+
+One behavior at a time, with the runner the repo already uses:
+
+1. **RED** — write ONE failing test. Run it. It MUST fail, and fail **for the right
+   reason**: the behavior is missing, not a typo, a missing import, or a harness that
+   will not start. **State the failure before writing any production code.** If the test
+   passes before the code exists, the test is wrong — fix the test first.
+2. **GREEN** — the minimum production code that makes that one test pass. Nothing more:
+   no extra features, no speculative abstractions, no handling of cases no test demands.
+3. **REFACTOR** — remove duplication and improve names, with the tests green throughout.
 
 Never write production code before its failing test exists. Never batch several tests
-and then implement. A bugfix STARTS with a test that reproduces the bug.
+and then implement them together. **A bugfix STARTS with a test that reproduces the
+bug** — if it passes on the unfixed code, it is not reproducing anything.
+
+Prefer the narrowest test that can fail for the right reason: a unit test over an
+integration test, an integration test over one that boots everything. A suite slow
+enough that people stop running it protects nothing.
+
+### What stops you, and what does not
+
+**Stop only for genuine ambiguity** — when two reasonable readings of the task produce
+different code and building the wrong one wastes the work. Say which readings you see
+and ask. Do not guess and do not pick silently.
+
+**A behavior you cannot test does not stop you.** Write it, and say so plainly in your
+report: what is not covered, why it resists testing, and what would make it testable — a
+seam, an injected clock, a fake for the third-party call. A declared gap is useful
+information. A silent gap reads as coverage that does not exist, which is worse than no
+test at all.
+
+The same applies to anything you had to assume: state the assumption where the reader
+will see it, rather than burying it in the code.
+
+### Think before you write
+
+- **State your assumptions explicitly** before implementing. If you are uncertain, say
+  so rather than choosing quietly.
+- **If a simpler approach exists, say so** — even when the task asked for the complex
+  one. Push back once, with the reason; then do what was asked.
+- If something is genuinely unclear, name **what** is unclear. "I need more context" is
+  not a question anyone can answer.
+
+### Simplicity first
+
+The minimum code that solves the problem, and nothing speculative.
+
+- No features beyond what was asked.
+- No abstraction for a single use. Two call sites are not a pattern.
+- No configurability, flexibility or extension point nobody requested.
+- No error handling for scenarios that cannot occur — it reads as though they can, and
+  the next reader will preserve it forever.
+
+Before you finish, read your own diff and ask: **would an experienced engineer on this
+team call this overcomplicated?** If yes, simplify it now, while it is still cheap.
+
+### Surgical changes
+
+Touch only what the task requires.
+
+- **Every changed line must trace to the request.** If you cannot say which part of the
+  task a line serves, it does not belong in this change.
+- Do not "improve" adjacent code, comments or formatting, and do not refactor what is
+  not broken. Both bury the real change in noise and make review harder.
+- **Match the surrounding style** even where you would write it differently. Consistency
+  inside a file beats your preference.
+- Remove imports, variables or functions **your** change orphaned. Leave pre-existing
+  dead code alone — **mention it** in your report instead of deleting it.
+
+### Define done before you start
+
+Turn a vague task into something checkable, and say what the check is:
+
+| Vague | Verifiable |
+|---|---|
+| "add validation" | tests for each invalid input, currently failing, then passing |
+| "fix the bug" | a test that reproduces it, failing now, passing after |
+| "refactor X" | the existing tests pass before and after, with no behavior change |
+
+The check does not have to be a test — a build that passes, a typecheck, a command with
+an expected output all count. The rule is only that **you decide how you will know you
+are done before you begin**, and report the result you actually observed. Never report
+a passing check you did not run.
+<!-- @end plugins/common/standards/build-discipline.md -->
 
 <!-- @include plugins/common/standards/db-change-request-template.md -->
 ## Database change request
@@ -260,16 +341,6 @@ column exists" or "No — the column is optional and the change degrades gracefu
 without it."
 <!-- @end plugins/common/standards/db-change-request-template.md -->
 
-## Step 3 — Guardrails (surgical changes)
-
-- Touch only what the task requires. Every changed line must trace to it.
-- Match the surrounding style even where you would write it differently.
-- Do not "improve" adjacent code, comments, or formatting.
-- Remove imports, variables, or methods **your** change orphaned. Leave pre-existing
-  dead code alone — mention it instead.
-- Never edit a migration that has already run in an environment you do not control;
-  write a new one.
-
 <!-- @include plugins/common/standards/security-checklist.md -->
 ## Security checklist — defect tier
 
@@ -338,7 +409,7 @@ you read it from the repo's own analyzer configuration.
   finding after it.
 <!-- @end plugins/common/standards/security-checklist.md -->
 
-## Step 4 — Static checks
+## Step 3 — Static checks
 
 Run the gates the repo actually configures — typically `vendor/bin/pint` and
 `vendor/bin/phpstan analyse` at the level declared in its config, plus the test suite.
@@ -347,7 +418,7 @@ Report the command and its real output.
 Do not raise the PHPStan level, add a tool the repo does not use, or edit its config as
 part of a feature task. If the task cannot pass the existing level, say why.
 
-## Step 5 — Sync version, changelog, and README
+## Step 4 — Sync version, changelog, and README
 
 <!-- @include plugins/common/standards/changelog-versioning.md -->
 ## Changelog & versioning (universal)
