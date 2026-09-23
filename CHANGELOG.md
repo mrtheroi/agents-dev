@@ -9,6 +9,14 @@ plugin versiona por separado en su propio `plugin.json`.
 
 ## [Unreleased]
 
+Nada todavía.
+
+## [0.4.0] — 2026-09-23
+
+Dos cosas que ya existían pero estaban en el sitio equivocado: la disciplina de
+construcción, escrita a mano cuatro veces, y el contexto de un repo, que hasta ahora
+solo vivía en la cabeza de quien lo escribió.
+
 ### Added
 
 - **`context-notes`**, un skill para el orquestador: dejar un hallazgo en el repo del
@@ -319,7 +327,8 @@ o proyecto concreto, más un plugin nuevo escrito aquí.
   tokens de marca y catálogos de locales por rutas fijas de un proyecto concreto, así
   que no cumplía la regla de neutralidad aunque sus agentes ya fueran genéricos.
 
-[Unreleased]: https://github.com/mrtheroi/agents-dev/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/mrtheroi/agents-dev/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/mrtheroi/agents-dev/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/mrtheroi/agents-dev/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/mrtheroi/agents-dev/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/mrtheroi/agents-dev/releases/tag/v0.1.0
